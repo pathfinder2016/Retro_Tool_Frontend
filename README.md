@@ -23,5 +23,17 @@ npm run unit
 # run all tests
 npm test
 ```
+## Objective
+> Use for retrospective meeting, which is one of the Agile process.
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Technology stack
+1. Vuejs
+2. ElementUI
+3. Vuex
+
+## Support
+
+If you have any question or any suggestion, please feel free to contact 
+
+- Mike.Xie@oocl.com
+- Water.Li@oocl.com 
