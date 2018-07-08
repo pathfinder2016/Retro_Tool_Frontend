@@ -30,10 +30,11 @@ npm test
 1. Vuejs
 2. ElementUI
 3. Vuex
+4. axios
 
 ## Support
 
-If you have any question or any suggestion, please feel free to contact 
+If you have any questions or any suggestions, please feel free to contact 
 
 - Mike.Xie@oocl.com
 - Water.Li@oocl.com 

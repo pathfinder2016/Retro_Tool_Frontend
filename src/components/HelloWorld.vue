@@ -5,10 +5,10 @@
     <ul>
       <li>
         <a
-          href="https://vuejs.org"
+          href="http://localhost:8090/retro/test"
           target="_blank"
         >
-          Core Docs
+          Test retro
         </a>
       </li>
       <li>

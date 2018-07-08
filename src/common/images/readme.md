@@ -1,2 +1,2 @@
 #Introduce
-> Please input you common js files to here
+> Please input you common image files to here
