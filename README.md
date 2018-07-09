@@ -32,6 +32,17 @@ npm test
 3. Vuex
 4. axios
 
+## Phase
+![image](https://note.youdao.com/yws/public/resource/abc19d0c87c72c545ff1038c680f3564/xmlnote/AE641DCC5EF944CE9E0D0EE1BCBA1AA7/22808)
+> Phase one: Retrospective + Action
+
+> Phase two: Deploy to Aliyun
+
+> Phase three: Authorization + Print
+
+> Phase four: Wechat program 
+
+
 ## Support
 
 If you have any questions or any suggestions, please feel free to contact 
