@@ -1,4 +1,5 @@
 <template>
+  <!--https://blog.csdn.net/zjiang1994/article/details/79809687-->
   <el-container direction="vertical">
     <el-main class="public-retro">public-retro
       <el-row>
@@ -120,6 +121,7 @@
         return {
           animation: 0,
           group: 'description',
+          sort: true,
           disabled: !this.editable,
           ghostClass: 'ghost'
         };

@@ -4,6 +4,7 @@ export default {
     NOT_WELL: 'NOT_WELL',
     SUGGESTION: 'SUGGESTION'
   },
+  
   VISIBILITY: {
     PUBLIC: 'PUBLIC',
     PRIVATE: 'PRIVATE'
