@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-    <el-input class="card-input" type="textarea" :rows="3" placeholder="Please offer your idea">
+    <el-input v-model="content" class="card-input" type="textarea" :rows="3" placeholder="Please offer your idea">
     </el-input>
   </el-card>
 </template>
@@ -9,7 +9,9 @@
   export default {
     props: {
       type: String,
-      isPrivate: Boolean
+      isPrivate: Boolean,
+      order: Number,
+      fixed: Boolean
     },
     data(){
       return {

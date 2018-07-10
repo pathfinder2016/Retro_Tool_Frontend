@@ -2,14 +2,16 @@
   <el-container direction="vertical">
     <el-main class="public-retro">public-retro
       <el-row>
-        <!--<el-col :span="8"><div class="view-content bg-purple">-->
-        <!--<draggable element="div" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">-->
-        <!--<transition-group type="transition">-->
-
-        <!--</transition-group>-->
-        <!--</draggable>-->
-        <!--</div>-->
-        <!--</el-col>-->
+        <el-col :span="8"><div class="view-content bg-purple">
+          <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
+            <transition-group type="transition">
+              <div v-for="card in wellCards" :key="card.order">
+                <card></card>
+              </div>
+            </transition-group>
+          </draggable>
+        </div>
+        </el-col>
 
         <!--
         transition-group 拥有transition所有属性
@@ -24,23 +26,25 @@
           <div class="view-content bg-purple-light">
             <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
               <transition-group type="transition">
-                <li v-for="card in wellCards" :key="card.likeNum">
+                <div v-for="card in wellCards" :key="card.order">
                   <card></card>
-                </li>
+                </div>
               </transition-group>
             </draggable>
           </div>
         </el-col>
 
-        <!--<el-col :span="8">-->
-          <!--<div class="view-content bg-purple">-->
-            <!--<draggable element="div" :options="dragOptions">-->
-              <!--<card></card>-->
-              <!--<card></card>-->
-              <!--<card></card>-->
-            <!--</draggable>-->
-          <!--</div>-->
-        <!--</el-col>-->
+        <el-col :span="8">
+          <div class="view-content bg-purple-light">
+            <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
+              <transition-group type="transition">
+                <div v-for="card in wellCards" :key="card.order">
+                  <card></card>
+                </div>
+              </transition-group>
+            </draggable>
+          </div>
+        </el-col>
 
       </el-row>
     </el-main>
@@ -67,6 +71,8 @@
   import Card from '../component/Card'
   import Constant from '../../../common/constant/constant'
   import Vue from 'Vue'
+  import ElementUI from 'element-ui';
+  Vue.use(ElementUI)
 
   let CardEntity = Vue.extend(Card)
 
@@ -78,7 +84,7 @@
 
     data() {
       return {
-        wellCards: [new CardEntity(), new CardEntity()],
+        wellCards: [],
         notWellCards: [],
         suggestionCards: []
       }
@@ -97,11 +103,13 @@
         return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
       },
 
-      addWellCard(visibility) {
-        this.wellCards.push({
-          component: Card
-
-        })
+      addWellCard() {
+        let wellCard = new CardEntity();
+        wellCard.type = Constant.CARD_TYPE.WELL
+        wellCard.isPrivate = false
+        wellCard.order = this.wellCards.length + 1;
+        wellCard.fixed = false
+        this.wellCards.push(wellCard)
       }
     },
 
@@ -114,6 +122,11 @@
           ghostClass: 'ghost'
         };
       }
+    },
+
+    mounted() {
+      this.addWellCard()
+      this.addWellCard()
     }
   }
 </script>
