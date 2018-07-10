@@ -49,6 +49,7 @@
       </el-row>
     </el-main>
 
+    <!--The same as above-->
     <el-main class="private-retro">private-retro
       <el-row>
         <el-col :span="8">
@@ -109,6 +110,7 @@
         wellCard.isPrivate = false
         wellCard.order = this.wellCards.length + 1;
         wellCard.fixed = false
+        console.log("Add well card " + wellCard.order)
         this.wellCards.push(wellCard)
       }
     },
@@ -133,14 +135,14 @@
 
 <style>
   .public-retro {
-    background-color: #E9EEF3;
+    background-color: aliceblue;
     color: #333;
     text-align: center;
     line-height: 10px;
   }
 
   .private-retro {
-    background-color: #B3C0D1;
+    background-color: aliceblue;
     color: #333;
     text-align: center;
     line-height: 10px;
