@@ -1,4 +1,4 @@
-import httpHelper from '../../../common/js/httpHelper'
+import httpHelper from '../../../common/util/httpHelper'
 
 const getRetros = async ()=>{
   return await httpHelper.get('http://localhost:8090/retro/test')
