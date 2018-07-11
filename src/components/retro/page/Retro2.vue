@@ -68,7 +68,7 @@
             </transition-group>
           </draggable>
           <!--ingore-elements: use for add new card-->
-          <card class="ignore-elements"></card>
+          <el-button @click="addPrivateWellCard">Add one</el-button>
         </div>
         </el-col>
 
@@ -90,6 +90,7 @@
                 </div>
               </transition-group>
             </draggable>
+            <el-button @click="addPrivateNotWellCard">Add one</el-button>
           </div>
         </el-col>
 
@@ -102,6 +103,7 @@
                 </div>
               </transition-group>
             </draggable>
+            <el-button @click="addPrivateSuggestionCard">Add one</el-button>
           </div>
         </el-col>
 
