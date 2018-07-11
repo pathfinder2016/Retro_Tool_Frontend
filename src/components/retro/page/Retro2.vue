@@ -1,5 +1,9 @@
 <template>
   <!--https://blog.csdn.net/zjiang1994/article/details/79809687-->
+  <!--
+    options: Type:object, Option used to initialize the sortable object
+
+  -->
   <el-container direction="vertical">
     <el-main class="public-retro">public-retro
       <el-row>
@@ -7,10 +11,12 @@
           <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
             <transition-group type="transition">
               <div v-for="card in wellCards" :key="card.order">
-                <card></card>
+                <card class="my-handle"></card>
               </div>
             </transition-group>
           </draggable>
+          <!--ingore-elements: use for add new card-->
+          <card class="ignore-elements"></card>
         </div>
         </el-col>
 
@@ -25,10 +31,10 @@
         -->
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="notWellCards" :options="dragOptions" :move="onMove">
               <transition-group type="transition">
-                <div v-for="card in wellCards" :key="card.order">
-                  <card></card>
+                <div v-for="card in notWellCards" :key="card.order">
+                  <card class="my-handle"></card>
                 </div>
               </transition-group>
             </draggable>
@@ -37,10 +43,10 @@
 
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="wellCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="suggestionCards" :options="dragOptions" :move="onMove">
               <transition-group type="transition">
-                <div v-for="card in wellCards" :key="card.order">
-                  <card></card>
+                <div v-for="card in suggestionCards" :key="card.order">
+                  <card class="my-handle"></card>
                 </div>
               </transition-group>
             </draggable>
@@ -106,24 +112,50 @@
       },
 
       addWellCard() {
-        let wellCard = new CardEntity();
-        wellCard.type = Constant.CARD_TYPE.WELL
-        wellCard.isPrivate = false
-        wellCard.order = this.wellCards.length + 1;
-        wellCard.fixed = false
-        console.log("Add well card " + wellCard.order)
-        this.wellCards.push(wellCard)
+        let card = new CardEntity();
+        card.type = Constant.CARD_TYPE.WELL
+        card.isPrivate = false
+        card.order = this.wellCards.length + 1;
+        card.fixed = false
+        console.log("Add well card " + card.order)
+        this.wellCards.push(card)
+      },
+      addNotWellCard() {
+        let card = new CardEntity();
+        card.type = Constant.CARD_TYPE.NOT_WELL
+        card.isPrivate = false
+        card.order = this.notWellCards.length + 1;
+        card.fixed = false
+        console.log("Add well card " + card.order)
+        this.notWellCards.push(card)
+      },
+      addSuggestionCard() {
+        let card = new CardEntity();
+        card.type = Constant.CARD_TYPE.SUGGESTION
+        card.isPrivate = false
+        card.order = this.suggestionCards.length + 1;
+        card.fixed = false
+        console.log("Add well card " + card.order)
+        this.suggestionCards.push(card)
       }
     },
 
     computed: {
+
+    /*
+    * group option: https://github.com/RubaXa/Sortable#group-option
+    *
+    * */
+
       dragOptions() {
         return {
           animation: 0,
-          group: 'description',
-          sort: true,
-          disabled: !this.editable,
-          ghostClass: 'ghost'
+          group: 'retroCards',
+          sort: true, // sorting inside list
+          // disabled: true, // Disables the sortable if set to true.
+          ghostClass: 'ghost',
+          scroll: true, // or HTMLElement
+          handle: '.my-handle'
         };
       }
     },
@@ -131,6 +163,10 @@
     mounted() {
       this.addWellCard()
       this.addWellCard()
+      this.addNotWellCard()
+      this.addNotWellCard()
+      this.addSuggestionCard()
+      this.addSuggestionCard()
     }
   }
 </script>
@@ -207,4 +243,9 @@
     width: 280px;
   }
 
+  /*Drag handle selector within list items*/
+  .my-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+  }
 </style>
