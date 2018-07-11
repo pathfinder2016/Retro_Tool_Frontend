@@ -1,22 +1,15 @@
 <template>
-  <!--https://blog.csdn.net/zjiang1994/article/details/79809687-->
-  <!--
-    options: Type:object, Option used to initialize the sortable object
-
-  -->
   <el-container direction="vertical">
     <el-main class="public-retro">public-retro
       <el-row>
         <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="public.wellCards" :options="dragOptions" :move="onMove">
+          <draggable element="div" v-model="public.wellCards" :options="dragOptions" @end="handlePublicWellCardsInput" @add="addPublicWellCard">
             <transition-group type="transition">
               <div v-for="card in public.wellCards" :key="card.order">
                 <card class="my-handle ghost"></card>
               </div>
             </transition-group>
           </draggable>
-          <!--ingore-elements: use for add new card-->
-          <card class="ignore-elements"></card>
         </div>
         </el-col>
 
@@ -31,7 +24,7 @@
         -->
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="public.notWellCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="public.notWellCards" :options="dragOptions">
               <transition-group type="transition">
                 <div v-for="card in public.notWellCards" :key="card.order">
                   <card class="my-handle"></card>
@@ -43,7 +36,7 @@
 
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="public.suggestionCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="public.suggestionCards" :options="dragOptions">
               <transition-group type="transition">
                 <div v-for="card in public.suggestionCards" :key="card.order">
                   <card class="my-handle"></card>
@@ -60,7 +53,7 @@
     <el-main class="private-retro">private-retro
       <el-row>
         <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="private.wellCards" :options="dragOptions" :move="onMove">
+          <draggable element="div" v-model="private.wellCards" :options="dragOptions" @onMove="movePrivateWellCard" @start="privateWellCardStart">
             <transition-group type="transition">
               <div v-for="card in private.wellCards" :key="card.order">
                 <card class="my-handle ghost"></card>
@@ -68,7 +61,7 @@
             </transition-group>
           </draggable>
           <!--ingore-elements: use for add new card-->
-          <el-button @click="addPrivateWellCard">Add one</el-button>
+          <el-button @click="addPrivateWellCard">+</el-button>
         </div>
         </el-col>
 
@@ -83,27 +76,27 @@
         -->
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="private.notWellCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="private.notWellCards" :options="dragOptions">
               <transition-group type="transition">
                 <div v-for="card in private.notWellCards" :key="card.order">
                   <card class="my-handle"></card>
                 </div>
               </transition-group>
             </draggable>
-            <el-button @click="addPrivateNotWellCard">Add one</el-button>
+            <el-button @click="addPrivateNotWellCard">+</el-button>
           </div>
         </el-col>
 
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="private.suggestionCards" :options="dragOptions" :move="onMove">
+            <draggable element="div" v-model="private.suggestionCards" :options="dragOptions">
               <transition-group type="transition">
                 <div v-for="card in private.suggestionCards" :key="card.order">
                   <card class="my-handle"></card>
                 </div>
               </transition-group>
             </draggable>
-            <el-button @click="addPrivateSuggestionCard">Add one</el-button>
+            <el-button @click="addPrivateSuggestionCard">+</el-button>
           </div>
         </el-col>
 
@@ -152,18 +145,34 @@
         console.log(result);
       },
 
-      onMove({relatedContext, draggedContext}) {
-        const relatedElement = relatedContext.element;
-        const draggedElement = draggedContext.element;
-        return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      movePrivateWellCard({to, from, dragged, draggedRect, related, relateRect}){
+        console.dir(to)
+        console.dir(from)
+        console.dir(dragged)
+        console.dir(draggedRect)
+        console.dir(related)
+        console.dir(relateRect)
+
       },
+
+      privateWellCardStart(event){
+        // debugger
+        event.oldIndex;  // element index within parent
+      },
+      handlePublicWellCardsInput(event, test){
+        debugger
+      },
+
+      addPublicWellCard(event, test){
+        debugger
+      },
+
 
       addPublicWellCard() {
         let card = new CardEntity();
         card.type = Constant.CARD_TYPE.WELL
         card.isPrivate = false
         card.order = this.public.wellCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.public.wellCards.push(card)
       },
@@ -172,7 +181,6 @@
         card.type = Constant.CARD_TYPE.NOT_WELL
         card.isPrivate = false
         card.order = this.public.notWellCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.public.notWellCards.push(card)
       },
@@ -181,7 +189,6 @@
         card.type = Constant.CARD_TYPE.SUGGESTION
         card.isPrivate = false
         card.order = this.public.suggestionCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.public.suggestionCards.push(card)
       },
@@ -191,7 +198,6 @@
         card.type = Constant.CARD_TYPE.WELL
         card.isPrivate = false
         card.order = this.private.wellCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.private.wellCards.push(card)
       },
@@ -200,7 +206,6 @@
         card.type = Constant.CARD_TYPE.NOT_WELL
         card.isPrivate = false
         card.order = this.private.notWellCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.private.notWellCards.push(card)
       },
@@ -209,7 +214,6 @@
         card.type = Constant.CARD_TYPE.SUGGESTION
         card.isPrivate = false
         card.order = this.private.suggestionCards.length + 1;
-        card.fixed = false
         console.log("Add well card " + card.order)
         this.private.suggestionCards.push(card)
       }
@@ -237,18 +241,6 @@
     },
 
     mounted() {
-      this.addPublicWellCard()
-      this.addPublicWellCard()
-      this.addPublicNotWellCard()
-      this.addPublicNotWellCard()
-      this.addPublicSuggestionCard()
-      this.addPublicSuggestionCard()
-      this.addPrivateWellCard()
-      this.addPrivateWellCard()
-      this.addPrivateNotWellCard()
-      this.addPrivateNotWellCard()
-      this.addPrivateSuggestionCard()
-      this.addPrivateSuggestionCard()
     }
   }
 </script>

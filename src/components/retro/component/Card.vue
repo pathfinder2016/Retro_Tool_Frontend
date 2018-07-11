@@ -10,8 +10,7 @@
     props: {
       type: String,
       isPrivate: Boolean,
-      order: Number,
-      fixed: Boolean
+      order: Number
     },
     data(){
       return {
