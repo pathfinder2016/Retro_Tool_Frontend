@@ -3,12 +3,14 @@
     <el-main class="public-retro">public-retro
       <el-row>
         <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="public.wellCards" :options="dragOptions" @end="handlePublicWellCardsInput" @add="addPublicWellCard">
-            <transition-group type="transition">
+          <!--用draggable包裹被拖拽的元素-->
+          <draggable element="div" v-model="public.wellCards" :options="dragOptions" @end="addPublicWellCard" @add="addPublicWellCard">
+            <transition-group type="transition" :name="'flip-list'">
               <div v-for="card in public.wellCards" :key="card.order">
                 <card class="my-handle ghost"></card>
               </div>
             </transition-group>
+            <card></card>
           </draggable>
         </div>
         </el-col>
@@ -53,7 +55,7 @@
     <el-main class="private-retro">private-retro
       <el-row>
         <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="private.wellCards" :options="dragOptions" @onMove="movePrivateWellCard" @start="privateWellCardStart">
+          <draggable element="div" v-model="private.wellCards" :move="getData" @end="testEnd" @update="dataGragEnd" :options="dragOptions" @start="privateWellCardStart">
             <transition-group type="transition">
               <div v-for="card in private.wellCards" :key="card.order">
                 <card class="my-handle ghost"></card>
@@ -65,15 +67,6 @@
         </div>
         </el-col>
 
-        <!--
-        transition-group 拥有transition所有属性
-        <transition-group> 元素作为多个元素/组件的过渡效果
-        但是需要关注的是它们的不同之处：
-            transition本身不会渲染出元素
-            但是transition-group 会渲染出元素节点；默认  tag属性为<span>，可修改。
-            ps:transition-group 的元素必须指定key 属性
-            https://cn.vuejs.org/v2/api/#transition-group
-        -->
         <el-col :span="8">
           <div class="view-content bg-purple-light">
             <draggable element="div" v-model="private.notWellCards" :options="dragOptions">
@@ -140,6 +133,22 @@
     },
 
     methods: {
+      testEnd(event){
+        debugger
+      },
+
+// Event when you move an item in the list or between lists
+      getData(evt){
+        debugger
+        console.dir(evt)
+        console.log(evt.draggedContext.element.id);
+      },
+
+      dataGragEnd(evt){
+        debugger
+        console.log('拖动前的索引：'+evt.oldIndex);
+        console.log('拖动后的索引：'+evt.newIndex);
+      },
       async test() {
         let result = await retroService.getRetros();
         console.log(result);
@@ -158,23 +167,26 @@
       privateWellCardStart(event){
         // debugger
         event.oldIndex;  // element index within parent
+        console.dir(event.item)
+        console.log('-----')
+        console.dir('---from----')
+        console.dir(event.from)
+        console.dir('---to----')
+        console.dir(event.to)
       },
+
       handlePublicWellCardsInput(event, test){
         debugger
       },
 
-      addPublicWellCard(event, test){
-        debugger
-      },
-
-
       addPublicWellCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.WELL
-        card.isPrivate = false
-        card.order = this.public.wellCards.length + 1;
-        console.log("Add well card " + card.order)
-        this.public.wellCards.push(card)
+        // debugger
+        // let card = new CardEntity();
+        // card.type = Constant.CARD_TYPE.WELL
+        // card.isPrivate = false
+        // card.order = this.public.wellCards.length + 1;
+        // console.log("Add well card " + card.order)
+        // this.public.wellCards.push(card)
       },
       addPublicNotWellCard() {
         let card = new CardEntity();
@@ -195,14 +207,17 @@
 
       addPrivateWellCard() {
         let card = new CardEntity();
+        debugger
         card.type = Constant.CARD_TYPE.WELL
         card.isPrivate = false
         card.order = this.private.wellCards.length + 1;
         console.log("Add well card " + card.order)
         this.private.wellCards.push(card)
+        debugger
       },
       addPrivateNotWellCard() {
         let card = new CardEntity();
+        debugger
         card.type = Constant.CARD_TYPE.NOT_WELL
         card.isPrivate = false
         card.order = this.private.notWellCards.length + 1;
@@ -228,13 +243,13 @@
 
       dragOptions() {
         return {
-          animation: 0,
+          animation: 150,//// ms, animation speed moving items when sorting, `0` — without animation
           group: 'retroCards',
           sort: true, // sorting inside list
-          // disabled: true, // Disables the sortable if set to true.
           ghostClass: 'ghost',
-
+          forceFallback: false,
           scroll: true,   //If set to true, the page (or sortable-area) scrolls when coming to an edge.
+          /*定义哪一部分可以被拖动*/
           handle: '.my-handle',
         };
       }
