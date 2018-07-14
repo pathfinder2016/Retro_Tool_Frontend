@@ -1,61 +1,41 @@
 <template>
-  <!--https://blog.csdn.net/zjiang1994/article/details/79809687-->
-  <!--
-    options: Type:object, Option used to initialize the sortable object
-
-  -->
-  <el-container direction="vertical"  @dragover="allowDrop">
+  <el-container direction="vertical">
     <el-main class="public-retro">public-retro
       <el-row>
         <el-col :span="8">
-          <div class="view-content bg-purple">
-            <draggable v-model="public.wellCards" class="list-group" :options="dragOptions"
-                       :drop="testtest"
-                       :move="handleMovePublicWellCard"
-                       :end="handleDragPublicWellCardEnd">
-              <transition-group>
-                <card v-for="card in public.wellCards"
-                      :key="card.order"
-                      :type="card.type"
-                      :isPrivate="card.isPrivate"
-                      :order="card.order"
-                      aria-hidden="true"
-                      class="my-handle list-group-item">
-                </card>
-              </transition-group>
-            </draggable>
+          <div class="view-content bg-purple"
+               @dragstart="public_well_card_dragstart_hanlder">
+            <transition-group>
+              <card v-for="card in public.wellCards"
+                    :id="card.order"
+                    :key="card.order"
+                    :type="card.type"
+                    :isPrivate="card.isPrivate"
+                    :order="card.order"
+                    draggable="true"
+                    aria-hidden="true"
+                    class="my-handle list-group-item">
+              </card>
+            </transition-group>
           </div>
         </el-col>
 
         <el-col :span="8">
-          <div class="view-content bg-purple-light">
-            <draggable v-model="public.notWellCards" class="list-group" :options="dragOptions"
-                       :drop="testtest"
-                       :add="handleAddPublicNotWellCards">
-              <transition-group>
-
-                <card v-if="public.notWellCards.length > 0" v-for="card in public.notWellCards"
-                      :key="card.order"
-                      class="my-handle list-group-item">
-                </card>
-                <card v-else class="list-group"></card>
-              </transition-group>
-            </draggable>
-          </div>
-        </el-col>
-
-        <<el-col :span="8">
-        <div class="view-content bg-purple">
-            <draggable v-model="public.suggestionCards" class="list-group" :options="dragOptions"
-                       @drop="testtest"
-                       @add="handleAddPublicNotWellCards">
-              <transition-group>
-                <card v-for="card in public.suggestionCards"
-                      :key="card.order"
-                      class="my-handle list-group-item">
-                </card>
-              </transition-group>
-            </draggable>
+          <div class="view-content bg-purple-light"
+               @drop="public_not_well_card_drop_handler"
+               @dragover="public_not_well_card_drag_over_handler">
+            <transition-group>
+              <card v-for="card in public.notWellCards"
+                    :id="card.order"
+                    :key="card.order"
+                    :type="card.type"
+                    :isPrivate="card.isPrivate"
+                    :order="card.order"
+                    draggable="true"
+                    aria-hidden="true"
+                    class="my-handle list-group-item">
+              </card>
+            </transition-group>
           </div>
         </el-col>
       </el-row>
@@ -64,7 +44,6 @@
 </template>
 
 <script>
-  import retroService from '../service/retroService'
   import draggable from 'vuedraggable'
   import Card from '../component/Card'
   import Constant from '../../../common/constant/constant'
@@ -92,13 +71,30 @@
     },
 
     methods: {
-      testtest(event){
-        debugger
+      //https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+      public_well_card_dragstart_hanlder(ev) {
+        console.log('public_well_card_dragstart_hanlder,,,,,,,,')
+        console.log(ev.target.id)
+        ev.dataTransfer.setData("text/plain", ev.target.id)
+        ev.dataTransfer.dropEffect = "copy"
       },
-      async test() {
-        let result = await retroService.getRetros();
-        console.log(result);
+
+      public_not_well_card_drop_handler(ev){
+        // Get the id of the target and add the moved element to the target's DOM
+        ev.preventDefault();
+        let data = ev.dataTransfer.getData("text")
+        ev.target.appendChild(document.getElementById(data));
       },
+
+      public_not_well_card_drag_over_handler(ev){
+        ev.preventDefault();
+        // Set the dropEffect to move
+        ev.dataTransfer.dropEffect = "move"
+      },
+
+      // public_well_card_drop_effect_handler(event){
+      //
+      // },
 
       addPublicWellCard() {
         this.cardNum = this.cardNum + 1
@@ -118,7 +114,7 @@
         })
       },
 
-      allowDrop:function (ev) {
+      allowDrop: function (ev) {
         ev.preventDefault();
       },
 
@@ -129,49 +125,14 @@
           order: this.cardNum,
           isPrivate: false
         })
-      },
-
-      handleAddPublicNotWellCards(event) {
-        debugger
-      },
-
-      handleDragPublicWellCardEnd(event) {
-        debugger
-      },
-
-      handleMovePublicWellCard(event){
-        console.log('handleMovePublicWellCard....')
-        // debugger
       }
-    },
 
-    computed: {
-
-      /*
-      * group option: https://github.com/RubaXa/Sortable#group-option
-      *
-      * */
-
-      dragOptions() {
-        return {
-          animation: 100,
-          group: 'retroCards',
-          sort: true, // sorting inside list
-          // disabled: true, // Disables the sortable if set to true.
-          // ghostClass: 'ghost',
-          // scroll: true,   //If set to true, the page (or sortable-area) scrolls when coming to an edge.
-          handle: '.my-handle',
-          // forceFallback:true, // ignore the HTML5 DnD behaviour and force the fallback to kick in
-          // fallbackClass:'draggingStyle'  // Class name for the cloned DOM Element when using forceFallback
-        };
-      }
     },
 
     mounted() {
       this.addPublicWellCard()
       this.addPublicWellCard()
-      this.addPublicNotWellCard()
-      // this.addSuggestionWellCard()
+      // this.addPublicNotWellCard()
     }
   }
 </script>
