@@ -4,38 +4,24 @@
     options: Type:object, Option used to initialize the sortable object
 
   -->
-  <el-container direction="vertical">
+  <el-container direction="vertical"  @dragover="allowDrop">
     <el-main class="public-retro">public-retro
       <el-row>
-        <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="public.wellCards" :options="dragOptions" :move="onMove">
-            <transition-group type="transition">
-              <div v-for="card in public.wellCards" :key="card.order">
-                <card class="my-handle ghost"></card>
-              </div>
-            </transition-group>
-          </draggable>
-          <!--ingore-elements: use for add new card-->
-          <card class="ignore-elements"></card>
-        </div>
-        </el-col>
-
-        <!--
-        transition-group 拥有transition所有属性
-        <transition-group> 元素作为多个元素/组件的过渡效果
-        但是需要关注的是它们的不同之处：
-            transition本身不会渲染出元素
-            但是transition-group 会渲染出元素节点；默认  tag属性为<span>，可修改。
-            ps:transition-group 的元素必须指定key 属性
-            https://cn.vuejs.org/v2/api/#transition-group
-        -->
         <el-col :span="8">
-          <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="public.notWellCards" :options="dragOptions" :move="onMove">
-              <transition-group type="transition">
-                <div v-for="card in public.notWellCards" :key="card.order">
-                  <card class="my-handle"></card>
-                </div>
+          <div class="view-content bg-purple">
+            <draggable v-model="public.wellCards" class="list-group" :options="dragOptions"
+                       :drop="testtest"
+                       :move="handleMovePublicWellCard"
+                       :end="handleDragPublicWellCardEnd">
+              <transition-group>
+                <card v-for="card in public.wellCards"
+                      :key="card.order"
+                      :type="card.type"
+                      :isPrivate="card.isPrivate"
+                      :order="card.order"
+                      aria-hidden="true"
+                      class="my-handle list-group-item">
+                </card>
               </transition-group>
             </draggable>
           </div>
@@ -43,68 +29,35 @@
 
         <el-col :span="8">
           <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="public.suggestionCards" :options="dragOptions" :move="onMove">
-              <transition-group type="transition">
-                <div v-for="card in public.suggestionCards" :key="card.order">
-                  <card class="my-handle"></card>
-                </div>
+            <draggable v-model="public.notWellCards" class="list-group" :options="dragOptions"
+                       :drop="testtest"
+                       :add="handleAddPublicNotWellCards">
+              <transition-group>
+
+                <card v-if="public.notWellCards.length > 0" v-for="card in public.notWellCards"
+                      :key="card.order"
+                      class="my-handle list-group-item">
+                </card>
+                <card v-else class="list-group"></card>
               </transition-group>
             </draggable>
           </div>
         </el-col>
 
-      </el-row>
-    </el-main>
-
-    <!--The same as above-->
-    <el-main class="private-retro">private-retro
-      <el-row>
-        <el-col :span="8"><div class="view-content bg-purple">
-          <draggable element="div" v-model="private.wellCards" :options="dragOptions" :move="onMove">
-            <transition-group type="transition">
-              <div v-for="card in private.wellCards" :key="card.order">
-                <card class="my-handle ghost"></card>
-              </div>
-            </transition-group>
-          </draggable>
-          <!--ingore-elements: use for add new card-->
-          <card class="ignore-elements"></card>
-        </div>
-        </el-col>
-
-        <!--
-        transition-group 拥有transition所有属性
-        <transition-group> 元素作为多个元素/组件的过渡效果
-        但是需要关注的是它们的不同之处：
-            transition本身不会渲染出元素
-            但是transition-group 会渲染出元素节点；默认  tag属性为<span>，可修改。
-            ps:transition-group 的元素必须指定key 属性
-            https://cn.vuejs.org/v2/api/#transition-group
-        -->
-        <el-col :span="8">
-          <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="private.notWellCards" :options="dragOptions" :move="onMove">
-              <transition-group type="transition">
-                <div v-for="card in private.notWellCards" :key="card.order">
-                  <card class="my-handle"></card>
-                </div>
+        <<el-col :span="8">
+        <div class="view-content bg-purple">
+            <draggable v-model="public.suggestionCards" class="list-group" :options="dragOptions"
+                       @drop="testtest"
+                       @add="handleAddPublicNotWellCards">
+              <transition-group>
+                <card v-for="card in public.suggestionCards"
+                      :key="card.order"
+                      class="my-handle list-group-item">
+                </card>
               </transition-group>
             </draggable>
           </div>
         </el-col>
-
-        <el-col :span="8">
-          <div class="view-content bg-purple-light">
-            <draggable element="div" v-model="private.suggestionCards" :options="dragOptions" :move="onMove">
-              <transition-group type="transition">
-                <div v-for="card in private.suggestionCards" :key="card.order">
-                  <card class="my-handle"></card>
-                </div>
-              </transition-group>
-            </draggable>
-          </div>
-        </el-col>
-
       </el-row>
     </el-main>
   </el-container>
@@ -115,11 +68,6 @@
   import draggable from 'vuedraggable'
   import Card from '../component/Card'
   import Constant from '../../../common/constant/constant'
-  import Vue from 'Vue'
-  import ElementUI from 'element-ui';
-  Vue.use(ElementUI)
-
-  let CardEntity = Vue.extend(Card)
 
   export default {
     components: {
@@ -138,98 +86,83 @@
           wellCards: [],
           notWellCards: [],
           suggestionCards: []
-        }
-
+        },
+        cardNum: 0
       }
-
     },
 
     methods: {
+      testtest(event){
+        debugger
+      },
       async test() {
         let result = await retroService.getRetros();
         console.log(result);
       },
 
-      onMove({relatedContext, draggedContext}) {
-        const relatedElement = relatedContext.element;
-        const draggedElement = draggedContext.element;
-        return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      },
-
       addPublicWellCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.WELL
-        card.isPrivate = false
-        card.order = this.public.wellCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.public.wellCards.push(card)
-      },
-      addPublicNotWellCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.NOT_WELL
-        card.isPrivate = false
-        card.order = this.public.notWellCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.public.notWellCards.push(card)
-      },
-      addPublicSuggestionCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.SUGGESTION
-        card.isPrivate = false
-        card.order = this.public.suggestionCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.public.suggestionCards.push(card)
+        this.cardNum = this.cardNum + 1
+        this.public.wellCards.push({
+          type: Constant.CARD_TYPE.WELL,
+          order: this.cardNum,
+          isPrivate: false
+        })
       },
 
-      addPrivateWellCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.WELL
-        card.isPrivate = false
-        card.order = this.private.wellCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.private.wellCards.push(card)
+      addPublicNotWellCard() {
+        this.cardNum = this.cardNum + 1
+        this.public.notWellCards.push({
+          type: Constant.CARD_TYPE.NOT_WELL,
+          order: this.cardNum,
+          isPrivate: false
+        })
       },
-      addPrivateNotWellCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.NOT_WELL
-        card.isPrivate = false
-        card.order = this.private.notWellCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.private.notWellCards.push(card)
+
+      allowDrop:function (ev) {
+        ev.preventDefault();
       },
-      addPrivateSuggestionCard() {
-        let card = new CardEntity();
-        card.type = Constant.CARD_TYPE.SUGGESTION
-        card.isPrivate = false
-        card.order = this.private.suggestionCards.length + 1;
-        card.fixed = false
-        console.log("Add well card " + card.order)
-        this.private.suggestionCards.push(card)
+
+      addSuggestionWellCard() {
+        this.cardNum = this.cardNum + 1
+        this.public.suggestionCards.push({
+          type: Constant.CARD_TYPE.SUGGESTION,
+          order: this.cardNum,
+          isPrivate: false
+        })
+      },
+
+      handleAddPublicNotWellCards(event) {
+        debugger
+      },
+
+      handleDragPublicWellCardEnd(event) {
+        debugger
+      },
+
+      handleMovePublicWellCard(event){
+        console.log('handleMovePublicWellCard....')
+        // debugger
       }
     },
 
     computed: {
 
-    /*
-    * group option: https://github.com/RubaXa/Sortable#group-option
-    *
-    * */
+      /*
+      * group option: https://github.com/RubaXa/Sortable#group-option
+      *
+      * */
 
       dragOptions() {
         return {
-          animation: 0,
+          animation: 100,
           group: 'retroCards',
           sort: true, // sorting inside list
           // disabled: true, // Disables the sortable if set to true.
-          ghostClass: 'ghost',
-
-          scroll: true,   //If set to true, the page (or sortable-area) scrolls when coming to an edge.
+          // ghostClass: 'ghost',
+          // scroll: true,   //If set to true, the page (or sortable-area) scrolls when coming to an edge.
           handle: '.my-handle',
+          // forceFallback:true, // ignore the HTML5 DnD behaviour and force the fallback to kick in
+          // fallbackClass:'draggingStyle'  // Class name for the cloned DOM Element when using forceFallback
         };
       }
     },
@@ -238,20 +171,16 @@
       this.addPublicWellCard()
       this.addPublicWellCard()
       this.addPublicNotWellCard()
-      this.addPublicNotWellCard()
-      this.addPublicSuggestionCard()
-      this.addPublicSuggestionCard()
-      this.addPrivateWellCard()
-      this.addPrivateWellCard()
-      this.addPrivateNotWellCard()
-      this.addPrivateNotWellCard()
-      this.addPrivateSuggestionCard()
-      this.addPrivateSuggestionCard()
+      // this.addSuggestionWellCard()
     }
   }
 </script>
 
 <style>
+  .list-group {
+    min-height: 1px;
+  }
+
   .public-retro {
     background-color: aliceblue;
     color: #333;
@@ -271,18 +200,6 @@
     min-height: 340px;
   }
 
-  .el-row {
-    margin-bottom: 20px;
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-
   .bg-purple {
     background: #d3dce6;
   }
@@ -291,43 +208,15 @@
     background: #e5e9f2;
   }
 
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
-
-  .text {
-    font-size: 14px;
-  }
-
-  .item {
-    margin-bottom: 18px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-
-  .clearfix:after {
-    clear: both
-  }
-
-  .box-card {
-    width: 280px;
-  }
-
   /*Drag handle selector within list items*/
   /* selector 格式为简单css选择器的字符串，使列表单元中符合选择器的元素成为拖动的手柄，只有按住拖动手柄才能使列表单元进行拖动*/
   .my-handle {
     cursor: move;
     cursor: -webkit-grabbing;
+  }
+
+  .list-group-item {
+    cursor: move;
   }
 
   /*Class name for the drop placeholder (default sortable-ghost).*/

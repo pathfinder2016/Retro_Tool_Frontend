@@ -10,8 +10,7 @@
     props: {
       type: String,
       isPrivate: Boolean,
-      order: Number,
-      fixed: Boolean
+      order: Number
     },
     data(){
       return {
@@ -25,7 +24,7 @@
 <style>
   .box-card {
     margin: 1px;
-    padding: 0px;
+    padding: 0;
     width: 300px;
     height: 110px;
     background-color: rgba(255, 221, 178, 0.69);
