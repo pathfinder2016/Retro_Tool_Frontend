@@ -225,6 +225,7 @@
   #retro_card_id {
     display: -webkit-flex;
     display: flex;
+    width: 100%;
     flex-direction: row;
   }
 
@@ -236,7 +237,7 @@
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     align-items: flex-start;
     align-content: flex-start;
   }
@@ -249,7 +250,7 @@
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     align-items: flex-start;
     align-content: flex-start;
   }
