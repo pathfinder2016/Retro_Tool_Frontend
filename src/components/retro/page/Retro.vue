@@ -1,14 +1,35 @@
 <template>
   <div id="retro_card_id" class="components-container board">
-    <Kanban header-text="Well" class="kanban well" :options="dropOptions" :list="public.wellCards"></Kanban>
-    <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
-    <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
+    <div class="kanban_header" :style="displayStyle.wellBoard">
+      <div class="board-column-header">Well</div>
+      <div>
+        <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
+      </div>
+      <Kanban class="kanban well" :options="dropOptions" :list="public.wellCards"></Kanban>
+    </div>
+
+    <div class="kanban_header" :style="displayStyle.notWellBoard">
+      <div class="board-column-header">Not Well</div>
+      <div>
+        <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
+      </div>
+      <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
+    </div>
+
+    <div class="kanban_header" :style="displayStyle.suggestionBoard">
+      <div class="board-column-header">Suggestion</div>
+      <div>
+        <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
+      </div>
+      <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
+    </div>
   </div>
 </template>
 
 <script>
   import Constant from '../../../common/constant/constant'
   import Kanban from '../component/Kanban'
+  import screenfull from 'screenfull'
 
   export default {
     components: {
@@ -17,6 +38,12 @@
 
     data() {
       return {
+        displayStyle:{
+          wellBoard: "display:block",
+          notWellBoard: "display:block",
+          suggestionBoard: "display:block"
+        },
+        isFullscreen: false,
         dropOptions:{
           group: 'retro'
         },
@@ -35,14 +62,48 @@
     },
 
     methods: {
-      public_well_card_full_screen_handler() {
-        let element = document.getElementById('well_card_div_id')
-        if (!document.webkitFullscreenElement) {  //For chrome
-          element.webkitRequestFullScreen()
-        } else {
-          if (element.webkitExitFullscreen)
-            element.webkitExitFullScreen()
+      public_well_card_full_screen_handler(){ //Unless UI behaviour
+        if (!screenfull.enabled) {
+          this.$message({
+            message: 'you browser can not work',
+            type: 'warning'
+          })
+          return false
         }
+        screenfull.toggle()
+      },
+
+      well_card_full_screen_handler(){
+        if(this.isFullscreen){
+          this.displayStyle.suggestionBoard = "display:block"
+          this.displayStyle.notWellBoard = "display:block"
+        }else{
+          this.displayStyle.suggestionBoard = "display:none"
+          this.displayStyle.notWellBoard = "display:none"
+        }
+        this.isFullscreen = !this.isFullscreen;
+        // this.public_well_card_full_screen_handler()
+      },
+      not_well_card_full_screen_handler(){
+        if(this.isFullscreen){
+          this.displayStyle.wellBoard = "display:block"
+          this.displayStyle.suggestionBoard = "display:block"
+        }else{
+          this.displayStyle.wellBoard = "display:none"
+          this.displayStyle.suggestionBoard = "display:none"
+        }
+        this.isFullscreen = !this.isFullscreen;
+      },
+
+      suggestion_card_full_screen_handler(){
+        if(this.isFullscreen){
+          this.displayStyle.wellBoard = "display:block"
+          this.displayStyle.notWellBoard = "display:block"
+        }else{
+          this.displayStyle.wellBoard = "display:none"
+          this.displayStyle.notWellBoard = "display:none"
+        }
+        this.isFullscreen = !this.isFullscreen;
       },
 
       //https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
