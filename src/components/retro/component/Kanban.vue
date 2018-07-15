@@ -1,11 +1,5 @@
 <template>
   <div class="board-column">
-    <div class="kanban_header">
-      <div class="board-column-header">{{headerText}}</div>
-      <div>
-        <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
-      </div>
-    </div>
     <draggable class="board-column-content" :list="list" :options="options">
       <card class="board-item" v-for="card in list" :key="card.order" :type="card.type" :order="card.order"></card>
     </draggable>
@@ -14,7 +8,6 @@
 <script>
   import draggable from 'vuedraggable'
   import Card from './Card'
-  import screenfull from 'screenfull'
 
   export default {
     components: {
@@ -22,10 +15,6 @@
       Card
     },
     props: {
-      headerText: {
-        type: String,
-        default: 'Header'
-      },
       options: {
         type: Object,
         default() {
@@ -38,18 +27,6 @@
           return []
         }
       }
-    },
-    methods:{
-      well_card_full_screen_handler(){ //Unless UI behaviour
-        if (!screenfull.enabled) {
-          this.$message({
-            message: 'you browser can not work',
-            type: 'warning'
-          })
-          return false
-        }
-        screenfull.toggle()
-      }
     }
   }
 </script>
@@ -59,7 +36,7 @@
     min-height: 500px;
     height: auto;
     overflow: hidden;
-    background: #f0f0f0;
+    /*background: #f0f0f0;*/
     border-radius: 3px; //圆角边框
 
     .board-column-header {
