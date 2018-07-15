@@ -2,12 +2,13 @@
     <div id="retro_card_id">
       <div>
         <div id="public_card_wrap_id">
-          <div>
+          <div id="public_well_card_div_id">
             <div id="public_well_card_header_div_id">
+              <div><el-button @click="public_well_card_full_screen_handler" round class="el-icon-rank"></el-button></div>
               <h3>Well</h3>
             </div>
-            <div id="public_well_card_div_id"
-                 @dragstart="dragstart_hanlder"
+            <div id="public_well_card_group_div_id"
+                 @dragstart="dragstart_handler"
                  @drop="drop_handler"
                  @dragover="drop_over_handler">
               <transition-group>
@@ -26,7 +27,7 @@
           </div>
 
           <div id="public_not_well_card_div_id"
-               @dragstart="dragstart_hanlder"
+               @dragstart="dragstart_handler"
                @drop="drop_handler"
                @dragover="drop_over_handler">
             <transition-group>
@@ -44,7 +45,7 @@
           </div>
 
           <div id="public_suggestion_card_div_id"
-               @dragstart="dragstart_hanlder"
+               @dragstart="dragstart_handler"
                @drop="drop_handler"
                @dragover="drop_over_handler">
             <transition-group>
@@ -65,7 +66,7 @@
 
       <div id="private_card_wrap_id">
         <div id="private_well_card_div_id"
-             @dragstart="dragstart_hanlder"
+             @dragstart="dragstart_handler"
              @drop="drop_handler"
              @dragover="drop_over_handler">
           <transition-group>
@@ -84,7 +85,7 @@
         </div>
 
         <div id="private_not_well_card_div_id"
-             @dragstart="dragstart_hanlder"
+             @dragstart="dragstart_handler"
              @drop="drop_handler"
              @dragover="drop_over_handler">
           <transition-group>
@@ -103,7 +104,7 @@
         </div>
 
         <div id="private_suggestion_card_div_id"
-             @dragstart="dragstart_hanlder"
+             @dragstart="dragstart_handler"
              @drop="drop_handler"
              @dragover="drop_over_handler">
           <transition-group>
@@ -152,8 +153,18 @@
     },
 
     methods: {
+      public_well_card_full_screen_handler(){
+        let element = document.getElementById('public_well_card_div_id')
+        if(!document.webkitFullscreenElement){  //For chrome
+          element.webkitRequestFullScreen()
+        }else{
+          if(element.webkitExitFullscreen)
+            element.webkitExitFullScreen()
+        }
+      },
+
       //https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
-      dragstart_hanlder(ev) {
+      dragstart_handler(ev) {
         ev.dataTransfer.setData("text/plain", ev.target.id)
         ev.dataTransfer.dropEffect = "copy"
       },
@@ -202,14 +213,21 @@
 
 <style>
   #public_well_card_header_div_id{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+  }
 
+  #public_well_card_div_id:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
   }
 
   #retro_card_id{
     display:inline-block;
   }
 
-  #public_well_card_div_id, #public_not_well_card_div_id, #public_suggestion_card_div_id{
+  #public_well_card_group_div_id, #public_not_well_card_div_id, #public_suggestion_card_div_id{
     width: 630px;
     height: 500px;
     border: 1px;
