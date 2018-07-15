@@ -1,142 +1,25 @@
 <template>
-  <div id="retro_card_id">
-      <div id="card_wrap_id">
-        <div id="well_card_div_id">
-          <div id="well_card_header_div_id">
-            <div>
-              <el-button @click="public_well_card_full_screen_handler" round class="el-icon-rank"></el-button>
-            </div>
-            <h3>Well</h3>
-          </div>
-          <div id="public_well_card_group_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in public.wellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-          </div>
-          <div id="private_well_card_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.wellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_well_card">+</el-button>
-          </div>
-        </div>
-
-        <div>
-          <div id="public_not_well_card_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in public.notWellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-          </div>
-          <div id="private_not_well_card_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.notWellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_not_well_card">+</el-button>
-          </div>
-        </div>
-
-        <div>
-          <div id="public_suggestion_card_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in public.suggestionCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-          </div>
-          <div id="private_suggestion_card_div_id"
-               @dragstart="dragstart_handler"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.suggestionCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_suggestion_card">+</el-button>
-          </div>
-        </div>
-      </div>
+  <div id="retro_card_id" class="components-container board">
+    <Kanban header-text="Well" :options="drop_options" :list="public.wellCards"></Kanban>
+    <Kanban header-text="Not Well" :options="drop_options" :list="public.notWellCards"></Kanban>
+    <Kanban header-text="Suggestion" :options="drop_options" :list="public.suggestionCards"></Kanban>
   </div>
 </template>
 
 <script>
-  import draggable from 'vuedraggable'
-  import Card from '../component/Card'
   import Constant from '../../../common/constant/constant'
+  import Kanban from '../component/Kanban'
 
   export default {
     components: {
-      draggable,
-      Card
+      Kanban
     },
 
     data() {
       return {
+        drop_options:{
+          group: 'retro'
+        },
         public: {
           wellCards: [],
           notWellCards: [],
@@ -179,6 +62,15 @@
         ev.dataTransfer.dropEffect = "move"
       },
 
+      add_public_well_card() {
+        this.cardNum = this.cardNum + 1
+        this.public.wellCards.push({
+          type: Constant.CARD_TYPE.WELL,
+          order: this.cardNum,
+          isPrivate: false
+        })
+      },
+
       add_private_well_card() {
         this.cardNum = this.cardNum + 1
         this.private.wellCards.push({
@@ -206,11 +98,29 @@
         })
       }
 
+    },
+    mounted(){
+      this.add_public_well_card();
+      this.add_public_well_card();
     }
   }
 </script>
 
-<style>
+<style lang="scss">
+  .components-container {
+    position: relative;
+    height: 100vh;
+  }
+
+  .board {
+    width: 1000px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
   #well_card_header_div_id {
     display: flex;
     justify-content: flex-start;
