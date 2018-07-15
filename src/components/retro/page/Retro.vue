@@ -104,6 +104,10 @@
       this.add_public_well_card();
       this.add_public_well_card();
       this.add_public_well_card();
+      this.add_public_well_card();
+      this.add_public_well_card();
+      this.add_public_well_card();
+      this.add_public_well_card();
     }
   }
 </script>
