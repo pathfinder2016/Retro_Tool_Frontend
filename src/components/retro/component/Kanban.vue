@@ -36,7 +36,6 @@
     min-height: 500px;
     height: auto;
     overflow: hidden;
-    /*background: #f0f0f0;*/
     border-radius: 3px; //圆角边框
 
     .board-column-header {
@@ -53,12 +52,12 @@
     .board-column-content {
       height: auto;
       overflow: hidden;
-      border: 10px solid transparent;
+      border: 1px solid transparent;
       min-height: 60px;
       display: inline-flex;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: start;
+      justify-content: center;
       align-items: flex-start;
       align-content: flex-start;
     }

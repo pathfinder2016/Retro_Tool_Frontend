@@ -2,44 +2,50 @@
   <div>
     <div id="retro_card_id" class="components-container board">
       <div class="kanban_header" :style="displayStyle.wellBoard">
-        <div class="public_well_card_div">
-          <div class="board-column-header">Well</div>
-          <div>
-            <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
+        <div class="kanban well">
+          <div class="board-column-header">
+            <div >Well</div>
+            <div>
+              <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
+            </div>
           </div>
-          <Kanban class="kanban well" :options="dropOptions" :list="public.wellCards"></Kanban>
+          <Kanban :options="dropOptions" :list="public.wellCards"></Kanban>
         </div>
         <div class="private_well_card_div">
           <el-button @click="add_private_well_card">+</el-button>
-          <Kanban class="kanban well" :options="dropOptions" :list="private.wellCards"></Kanban>
+          <Kanban :options="dropOptions" :list="private.wellCards"></Kanban>
         </div>
       </div>
 
       <div class="kanban_header" :style="displayStyle.notWellBoard">
-        <div class="public_not_well_card_div">
-          <div class="board-column-header">Not Well</div>
-          <div>
-            <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
+        <div class="kanban notwell">
+          <div class="board-column-header">
+            <div>Not Well</div>
+            <div>
+              <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
+            </div>
           </div>
           <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
         </div>
         <div class="private_not_well_card_div">
           <el-button @click="add_private_not_well_card">+</el-button>
-          <Kanban class="kanban well" :options="dropOptions" :list="private.notWellCards"></Kanban>
+          <Kanban :options="dropOptions" :list="private.notWellCards"></Kanban>
         </div>
       </div>
 
       <div class="kanban_header" :style="displayStyle.suggestionBoard">
-        <div class="public_suggestion_card_div">
-          <div class="board-column-header">Suggestion</div>
-          <div>
-            <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
+        <div class="kanban suggestion">
+          <div class="board-column-header">
+            <div>Suggestion</div>
+            <div>
+              <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
+            </div>
           </div>
           <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
         </div>
         <div class="private_suggestion_card_div">
           <el-button @click="add_private_suggestion_card">+</el-button>
-          <Kanban class="kanban well" :options="dropOptions" :list="private.suggestionCards"></Kanban>
+          <Kanban :options="dropOptions" :list="private.suggestionCards"></Kanban>
         </div>
       </div>
     </div>
@@ -58,13 +64,13 @@
 
     data() {
       return {
-        displayStyle:{
+        displayStyle: {
           wellBoard: "display:block",
           notWellBoard: "display:block",
           suggestionBoard: "display:block"
         },
         isFullscreen: false,
-        dropOptions:{
+        dropOptions: {
           group: 'retro'
         },
         public: {
@@ -82,7 +88,7 @@
     },
 
     methods: {
-      public_well_card_full_screen_handler(){ //Unless UI behaviour
+      public_well_card_full_screen_handler() { //Unless UI behaviour
         if (!screenfull.enabled) {
           this.$message({
             message: 'you browser can not work',
@@ -93,33 +99,33 @@
         screenfull.toggle()
       },
 
-      well_card_full_screen_handler(){
-        if(this.isFullscreen){
+      well_card_full_screen_handler() {
+        if (this.isFullscreen) {
           this.displayStyle.suggestionBoard = "display:block"
           this.displayStyle.notWellBoard = "display:block"
-        }else{
+        } else {
           this.displayStyle.suggestionBoard = "display:none"
           this.displayStyle.notWellBoard = "display:none"
         }
         this.isFullscreen = !this.isFullscreen;
         // this.public_well_card_full_screen_handler()
       },
-      not_well_card_full_screen_handler(){
-        if(this.isFullscreen){
+      not_well_card_full_screen_handler() {
+        if (this.isFullscreen) {
           this.displayStyle.wellBoard = "display:block"
           this.displayStyle.suggestionBoard = "display:block"
-        }else{
+        } else {
           this.displayStyle.wellBoard = "display:none"
           this.displayStyle.suggestionBoard = "display:none"
         }
         this.isFullscreen = !this.isFullscreen;
       },
 
-      suggestion_card_full_screen_handler(){
-        if(this.isFullscreen){
+      suggestion_card_full_screen_handler() {
+        if (this.isFullscreen) {
           this.displayStyle.wellBoard = "display:block"
           this.displayStyle.notWellBoard = "display:block"
-        }else{
+        } else {
           this.displayStyle.wellBoard = "display:none"
           this.displayStyle.notWellBoard = "display:none"
         }
@@ -248,7 +254,9 @@
         background: #4A9FF9;
       }
       .board-column-content{
-        background: lightcyan;
+        border: 1px dashed;
+        min-width: 620px;
+        min-height: 500px;
       }
     }
     &.notwell {
@@ -256,7 +264,9 @@
         background: #f9944a;
       }
       .board-column-content{
-        background: lavender;
+        border: 1px dashed;
+        min-width: 620px;
+        min-height: 500px;
       }
     }
     &.suggestion {
@@ -264,7 +274,9 @@
         background: #2ac06d;
       }
       .board-column-content{
-        background: lightcyan;
+        border: 1px dashed;
+        min-width: 620px;
+        min-height: 500px;
       }
     }
   }
