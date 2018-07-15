@@ -1,9 +1,8 @@
 <template>
-  <el-container direction="vertical">
-    <el-main class="public-retro">public-retro
-      <el-row>
-        <el-col :span="8">
-          <div class="view-content bg-purple"
+    <div id="retro_card_id">
+      <div>
+        <div id="public_card_wrap_id">
+          <div id="public_well_card_div_id" class="view-content bg-purple"
                @dragstart="dragstart_hanlder"
                @drop="drop_handler"
                @dragover="drop_over_handler">
@@ -20,10 +19,8 @@
               </card>
             </transition-group>
           </div>
-        </el-col>
 
-        <el-col :span="8">
-          <div class="view-content bg-purple-light"
+          <div id="public_not_well_card_div_id" class="view-content bg-purple-light"
                @dragstart="dragstart_hanlder"
                @drop="drop_handler"
                @dragover="drop_over_handler">
@@ -40,10 +37,8 @@
               </card>
             </transition-group>
           </div>
-        </el-col>
 
-        <el-col :span="8">
-          <div class="view-content bg-purple"
+          <div id="public_suggestion_card_div_id" class="view-content bg-purple"
                @dragstart="dragstart_hanlder"
                @drop="drop_handler"
                @dragover="drop_over_handler">
@@ -60,77 +55,68 @@
               </card>
             </transition-group>
           </div>
-        </el-col>
-      </el-row>
-    </el-main>
+        </div>
+      </div>
 
-    <el-main class="private-retro">public-retro
-      <el-row>
-        <el-col :span="8">
-          <div class="view-content bg-purple"
-               @dragstart="dragstart_hanlder"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.wellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_well_card">+</el-button>
-          </div>
-        </el-col>
+      <div id="private_card_wrap_id">
+        <div id="private_well_card_div_id" class="view-content bg-purple"
+             @dragstart="dragstart_hanlder"
+             @drop="drop_handler"
+             @dragover="drop_over_handler">
+          <transition-group>
+            <card v-for="card in private.wellCards"
+                  :id="card.order"
+                  :key="card.order"
+                  :type="card.type"
+                  :isPrivate="card.isPrivate"
+                  :order="card.order"
+                  draggable="true"
+                  aria-hidden="true"
+                  class="my-handle list-group-item">
+            </card>
+          </transition-group>
+          <el-button @click="add_private_well_card">+</el-button>
+        </div>
 
-        <el-col :span="8">
-          <div class="view-content bg-purple-light"
-               @dragstart="dragstart_hanlder"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.notWellCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_not_well_card">+</el-button>
-          </div>
-        </el-col>
+        <div id="private_not_well_card_div_id" class="view-content bg-purple-light"
+             @dragstart="dragstart_hanlder"
+             @drop="drop_handler"
+             @dragover="drop_over_handler">
+          <transition-group>
+            <card v-for="card in private.notWellCards"
+                  :id="card.order"
+                  :key="card.order"
+                  :type="card.type"
+                  :isPrivate="card.isPrivate"
+                  :order="card.order"
+                  draggable="true"
+                  aria-hidden="true"
+                  class="my-handle list-group-item">
+            </card>
+          </transition-group>
+          <el-button @click="add_private_not_well_card">+</el-button>
+        </div>
 
-        <el-col :span="8">
-          <div class="view-content bg-purple"
-               @dragstart="dragstart_hanlder"
-               @drop="drop_handler"
-               @dragover="drop_over_handler">
-            <transition-group>
-              <card v-for="card in private.suggestionCards"
-                    :id="card.order"
-                    :key="card.order"
-                    :type="card.type"
-                    :isPrivate="card.isPrivate"
-                    :order="card.order"
-                    draggable="true"
-                    aria-hidden="true"
-                    class="my-handle list-group-item">
-              </card>
-            </transition-group>
-            <el-button @click="add_private_suggestion_card">+</el-button>
-          </div>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+        <div id="private_suggestion_card_div_id" class="view-content bg-purple"
+             @dragstart="dragstart_hanlder"
+             @drop="drop_handler"
+             @dragover="drop_over_handler">
+          <transition-group>
+            <card v-for="card in private.suggestionCards"
+                  :id="card.order"
+                  :key="card.order"
+                  :type="card.type"
+                  :isPrivate="card.isPrivate"
+                  :order="card.order"
+                  draggable="true"
+                  aria-hidden="true"
+                  class="my-handle list-group-item">
+            </card>
+          </transition-group>
+          <el-button @click="add_private_suggestion_card">+</el-button>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -167,7 +153,7 @@
         ev.dataTransfer.dropEffect = "copy"
       },
 
-      drop_handler(ev){
+      drop_handler(ev) {
         ev.preventDefault();
         let data = ev.dataTransfer.getData("text")
         ev.target.appendChild(document.getElementById(data));
@@ -210,6 +196,22 @@
 </script>
 
 <style>
+  #retro_card_id{
+    display:inline-block;
+  }
+
+  #public_well_card_div_id, #public_not_well_card_div_id, #public_suggestion_card_div_id,
+  #private_well_card_div_id, #private_not_well_card_div_id, #private_suggestion_card_div_id{
+    width: 630px;
+    height: 400px;
+  }
+
+  #public_card_wrap_id, #private_card_wrap_id{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 10px;
+  }
   .public-retro {
     background-color: aliceblue;
     color: #333;
@@ -236,6 +238,7 @@
   .bg-purple-light {
     background: #e5e9f2;
   }
+
   /*Drag handle selector within list items*/
   /* selector 格式为简单css选择器的字符串，使列表单元中符合选择器的元素成为拖动的手柄，只有按住拖动手柄才能使列表单元进行拖动*/
   .my-handle {
