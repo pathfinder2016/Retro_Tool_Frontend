@@ -1,8 +1,8 @@
 <template>
   <div id="retro_card_id" class="components-container board">
-    <Kanban header-text="Well" :options="drop_options" :list="public.wellCards"></Kanban>
-    <Kanban header-text="Not Well" :options="drop_options" :list="public.notWellCards"></Kanban>
-    <Kanban header-text="Suggestion" :options="drop_options" :list="public.suggestionCards"></Kanban>
+    <Kanban header-text="Well" class="kanban well" :options="drop_options" :list="public.wellCards"></Kanban>
+    <Kanban header-text="Not Well" class="kanban notwell" :options="drop_options" :list="public.notWellCards"></Kanban>
+    <Kanban header-text="Suggestion" class="kanban suggestion" :options="drop_options" :list="public.suggestionCards"></Kanban>
   </div>
 </template>
 
@@ -102,6 +102,8 @@
     mounted(){
       this.add_public_well_card();
       this.add_public_well_card();
+      this.add_public_well_card();
+      this.add_public_well_card();
     }
   }
 </script>
@@ -114,7 +116,7 @@
 
   .board {
     width: 1000px;
-    margin-left: 20px;
+    margin-left: 10px;
     display: flex;
     justify-content: space-around;
     flex-direction: row;
@@ -181,6 +183,33 @@
 
   .list-group-item {
     cursor: move;
+  }
+
+  .kanban {
+    &.well {
+      .board-column-header {
+        background: #4A9FF9;
+      }
+      .board-column-content{
+        background: lightcyan;
+      }
+    }
+    &.notwell {
+      .board-column-header {
+        background: #f9944a;
+      }
+      .board-column-content{
+        background: lavender;
+      }
+    }
+    &.suggestion {
+      .board-column-header {
+        background: #2ac06d;
+      }
+      .board-column-content{
+        background: lightcyan;
+      }
+    }
   }
 
 </style>
