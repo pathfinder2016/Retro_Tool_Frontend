@@ -1,7 +1,8 @@
 <template>
   <div class="board-column">
-    <div class="board-column-header">
-      {{headerText}}
+    <div class="kanban_header">
+      <div class="board-column-header">{{headerText}}</div>
+      <div><el-button round class="el-icon-rank"></el-button></div>
     </div>
     <draggable class="board-column-content" :list="list" :options="options">
       <card class="board-item" v-for="card in list" :key="card.order" :type="card.type" :order="card.order"></card>

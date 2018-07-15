@@ -1,8 +1,8 @@
 <template>
   <div id="retro_card_id" class="components-container board">
-    <Kanban header-text="Well" class="kanban well" :options="drop_options" :list="public.wellCards"></Kanban>
-    <Kanban header-text="Not Well" class="kanban notwell" :options="drop_options" :list="public.notWellCards"></Kanban>
-    <Kanban header-text="Suggestion" class="kanban suggestion" :options="drop_options" :list="public.suggestionCards"></Kanban>
+    <Kanban header-text="Well" class="kanban well" :options="dropOptions" :list="public.wellCards"></Kanban>
+    <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
+    <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
   </div>
 </template>
 
@@ -17,7 +17,7 @@
 
     data() {
       return {
-        drop_options:{
+        dropOptions:{
           group: 'retro'
         },
         public: {
