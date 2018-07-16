@@ -11,7 +11,7 @@
           </div>
           <Kanban :options="dropOptions" :list="public.wellCards"></Kanban>
         </div>
-        <div>
+        <div class="kanban private_area">
           <el-button @click="add_private_well_card">+</el-button>
           <Kanban :options="dropOptions" :list="private.wellCards"></Kanban>
         </div>
@@ -27,7 +27,7 @@
           </div>
           <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
         </div>
-        <div class="private_not_well_card_div">
+        <div class="kanban private_area">
           <el-button @click="add_private_not_well_card">+</el-button>
           <Kanban :options="dropOptions" :list="private.notWellCards"></Kanban>
         </div>
@@ -43,7 +43,7 @@
           </div>
           <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
         </div>
-        <div class="private_suggestion_card_div">
+        <div class="kanban private_area">
           <el-button @click="add_private_suggestion_card">+</el-button>
           <Kanban :options="dropOptions" :list="private.suggestionCards"></Kanban>
         </div>
@@ -88,17 +88,6 @@
     },
 
     methods: {
-      public_well_card_full_screen_handler() { //Unless UI behaviour
-        if (!screenfull.enabled) {
-          this.$message({
-            message: 'you browser can not work',
-            type: 'warning'
-          })
-          return false
-        }
-        screenfull.toggle()
-      },
-
       well_card_full_screen_handler() {
         if (this.isFullscreen) {
           this.displayStyle.suggestionBoard = "display:block"
@@ -108,7 +97,6 @@
           this.displayStyle.notWellBoard = "display:none"
         }
         this.isFullscreen = !this.isFullscreen;
-        // this.public_well_card_full_screen_handler()
       },
       not_well_card_full_screen_handler() {
         if (this.isFullscreen) {
@@ -144,9 +132,9 @@
       add_private_well_card() {
         this.cardNum = this.cardNum + 1
         this.private.wellCards.push({
-          type: Constant.CARD_TYPE.WELL,
+          // type: Constant.CARD_TYPE.WELL, //meaningless: because user can change the card between kanbans
           order: this.cardNum,
-          isPrivate: false,
+          // isPrivate: false,
           content: ''
         })
       },
@@ -154,19 +142,29 @@
       add_private_not_well_card() {
         this.cardNum = this.cardNum + 1
         this.private.notWellCards.push({
-          type: Constant.CARD_TYPE.NOT_WELL,
-          order: this.cardNum,
-          isPrivate: false
+          order: this.cardNum
         })
       },
 
       add_private_suggestion_card() {
         this.cardNum = this.cardNum + 1
         this.private.suggestionCards.push({
-          type: Constant.CARD_TYPE.SUGGESTION,
-          order: this.cardNum,
-          isPrivate: false
+          order: this.cardNum
         })
+      }
+    },
+
+    watch:{
+      'public.wellCards': function (newVal, oldVal) {
+        console.dir(newVal)
+        console.dir(oldVal)
+        debugger
+      },
+
+      'public.notWellCards': function (newVal, oldVal) {
+        console.dir(newVal)
+        console.dir(oldVal)
+        debugger
       }
     }
   }
@@ -174,18 +172,6 @@
 
 <style lang="scss">
 
-  .private-board-column-content {
-    height: 150px;
-    overflow: hidden;
-    border: 1px solid transparent;
-    min-height: 60px;
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    align-content: flex-start;
-  }
   .components-container {
     position: relative;
     height: 100vh;
@@ -200,17 +186,6 @@
     align-items: flex-start;
   }
 
-  #well_card_header_div_id {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-  }
-
-  #well_card_div_id:-webkit-full-screen {
-    width: 100%;
-    height: 100%;
-  }
-
   #retro_card_id {
     display: -webkit-flex;
     display: flex;
@@ -218,41 +193,6 @@
     flex-direction: row;
   }
 
-  #public_well_card_group_div_id, #public_not_well_card_div_id, #public_suggestion_card_div_id {
-    width: 630px;
-    height: 500px;
-    border: 1px;
-    border-style: dashed;
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    align-items: flex-start;
-    align-content: flex-start;
-  }
-
-  #private_well_card_div, #private_not_well_card_div_id, #private_suggestion_card_div_id {
-    width: 630px;
-    height: 150px;
-    border: 1px;
-    border-style: dashed;
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    align-items: flex-start;
-    align-content: flex-start;
-  }
-
-  #card_wrap_id, #private_card_wrap_id {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-    margin: 10px;
-  }
-
-  /*Drag handle selector within list items*/
-  /* selector 格式为简单css选择器的字符串，使列表单元中符合选择器的元素成为拖动的手柄，只有按住拖动手柄才能使列表单元进行拖动*/
   .my-handle {
     cursor: move;
     cursor: -webkit-grabbing;
@@ -260,12 +200,6 @@
 
   .list-group-item {
     cursor: move;
-  }
-
-  .private-board-column-content{
-    border: 1px dashed;
-    min-width: 620px;
-    min-height: 500px;
   }
 
   .kanban {
@@ -279,6 +213,15 @@
         min-height: 500px;
       }
     }
+
+    &.private_area {
+      .board-column-content{
+        border: 1px dashed;
+        min-width: 620px;
+        min-height: 270px;
+      }
+    }
+
     &.notwell {
       .board-column-header {
         background: #f9944a;
