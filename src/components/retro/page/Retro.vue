@@ -11,7 +11,7 @@
           </div>
           <Kanban :options="dropOptions" :list="public.wellCards"></Kanban>
         </div>
-        <div class="private_well_card_div">
+        <div>
           <el-button @click="add_private_well_card">+</el-button>
           <Kanban :options="dropOptions" :list="private.wellCards"></Kanban>
         </div>
@@ -146,7 +146,8 @@
         this.private.wellCards.push({
           type: Constant.CARD_TYPE.WELL,
           order: this.cardNum,
-          isPrivate: false
+          isPrivate: false,
+          content: ''
         })
       },
 
@@ -172,6 +173,19 @@
 </script>
 
 <style lang="scss">
+
+  .private-board-column-content {
+    height: 150px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    min-height: 60px;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+  }
   .components-container {
     position: relative;
     height: 100vh;
@@ -217,7 +231,7 @@
     align-content: flex-start;
   }
 
-  #private_well_card_div_id, #private_not_well_card_div_id, #private_suggestion_card_div_id {
+  #private_well_card_div, #private_not_well_card_div_id, #private_suggestion_card_div_id {
     width: 630px;
     height: 150px;
     border: 1px;
@@ -246,6 +260,12 @@
 
   .list-group-item {
     cursor: move;
+  }
+
+  .private-board-column-content{
+    border: 1px dashed;
+    min-width: 620px;
+    min-height: 500px;
   }
 
   .kanban {
