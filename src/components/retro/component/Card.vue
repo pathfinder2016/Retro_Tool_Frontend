@@ -1,7 +1,6 @@
 <template>
   <div class="box-card">
-    <textarea v-model="content" class="card-textarea" type="textarea" :rows="3">
-    </textarea>
+    <textarea v-model="content" class="card-textarea" type="textarea" :rows="3"></textarea>
   </div>
 </template>
 
