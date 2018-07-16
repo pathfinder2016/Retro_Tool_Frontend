@@ -53,10 +53,8 @@
 </template>
 
 <script>
-  import Constant from '../../../common/constant/constant'
   import Kanban from '../component/Kanban'
-  import screenfull from 'screenfull'
-
+  import retroService from '../service/retroService'
   export default {
     components: {
       Kanban
@@ -98,6 +96,7 @@
         }
         this.isFullscreen = !this.isFullscreen;
       },
+
       not_well_card_full_screen_handler() {
         if (this.isFullscreen) {
           this.displayStyle.wellBoard = "display:block"
@@ -118,15 +117,6 @@
           this.displayStyle.notWellBoard = "display:none"
         }
         this.isFullscreen = !this.isFullscreen;
-      },
-
-      add_public_well_card() {
-        this.cardNum = this.cardNum + 1
-        this.public.wellCards.push({
-          type: Constant.CARD_TYPE.WELL,
-          order: this.cardNum,
-          isPrivate: false
-        })
       },
 
       add_private_well_card() {
@@ -155,16 +145,17 @@
     },
 
     watch:{
-      'public.wellCards': function (newVal, oldVal) {
-        console.dir(newVal)
-        console.dir(oldVal)
-        debugger
+      'public.wellCards': function () {
+        console.dir(this.public.wellCards)
+        retroService.upsertPublicWellCards(this.public.wellCards);
       },
 
-      'public.notWellCards': function (newVal, oldVal) {
-        console.dir(newVal)
-        console.dir(oldVal)
-        debugger
+      'public.notWellCards': function () {
+        console.dir(this.public.notWellCards)
+      },
+
+      'public.suggestionCards': function () {
+        console.dir(this.public.suggestionCards)
       }
     }
   }

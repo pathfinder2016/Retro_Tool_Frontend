@@ -1,9 +1,9 @@
 import httpHelper from '../../../common/util/httpHelper'
 
-const getRetros = async ()=>{
-  return await httpHelper.get('http://localhost:8090/retro/test')
+const upsertPublicWellCards = async (list)=>{
+  return await httpHelper.post('http://localhost:8090/card/public/well', list)
 }
 
 export default {
-  getRetros: getRetros
+  upsertPublicWellCards: upsertPublicWellCards
 }
