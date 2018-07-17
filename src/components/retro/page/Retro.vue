@@ -162,7 +162,6 @@
 </script>
 
 <style lang="scss">
-
   .components-container {
     position: relative;
     height: 100vh;
@@ -201,7 +200,8 @@
       .board-column-content{
         border: 1px dashed;
         min-width: 620px;
-        min-height: 500px;
+        height: 500px;
+        overflow:scroll;
       }
     }
 
@@ -209,7 +209,8 @@
       .board-column-content{
         border: 1px dashed;
         min-width: 620px;
-        min-height: 270px;
+        height: 270px;
+        overflow:scroll;
       }
     }
 
@@ -220,7 +221,8 @@
       .board-column-content{
         border: 1px dashed;
         min-width: 620px;
-        min-height: 500px;
+        height: 500px;
+        overflow: scroll;
       }
     }
     &.suggestion {
@@ -230,7 +232,8 @@
       .board-column-content{
         border: 1px dashed;
         min-width: 620px;
-        min-height: 500px;
+        height: 500px;
+        overflow: scroll;
       }
     }
   }
