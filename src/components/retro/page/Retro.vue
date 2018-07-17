@@ -81,7 +81,8 @@
           notWellCards: [],
           suggestionCards: []
         },
-        cardNum: 0
+        cardNum: 0,
+        socket:{}
       }
     },
 
@@ -141,13 +142,34 @@
         this.private.suggestionCards.push({
           order: this.cardNum
         })
+      },
+      //https://blog.csdn.net/zhangdehua678/article/details/78913839
+      connectSocket(){
+        if(typeof (WebSocket) === 'undefined'){
+          console.log("您的浏览器不支持WebSocket");
+        }else{
+          console.log("您的浏览器支持WebSocket");
+          //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+          this.socket =  new WebSocket("ws://localhost:8090/websocket")
+          this.socket.onopen = ()=>{
+            console.log("Socket 已打开");
+            this.socket.send(this.public.wellCards);
+          }
+
+          //获得消息事件
+          this.socket.onmessage = function(msg) {
+            console.log(msg.data);
+            //发现消息进入    调后台获取
+          };
+        }
       }
     },
 
     watch:{
       'public.wellCards': function () {
+        console.log("public.wellCards")
         console.dir(this.public.wellCards)
-        retroService.upsertPublicWellCards(this.public.wellCards);
+        // retroService.upsertPublicWellCards(this.public.wellCards);
       },
 
       'public.notWellCards': function () {
@@ -157,6 +179,11 @@
       'public.suggestionCards': function () {
         console.dir(this.public.suggestionCards)
       }
+    },
+
+    mounted(){
+      //Access websocket
+      this.connectSocket();
     }
   }
 </script>
