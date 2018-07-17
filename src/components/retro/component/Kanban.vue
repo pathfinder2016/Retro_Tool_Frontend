@@ -34,14 +34,14 @@
   .box-card {
     margin: 1px;
     padding: 5px 5px 5px 5px;
-    width: 290px;
+    width: 280px;
     height: 120px;
     border-radius: 20px;
     background-color: rgba(255, 221, 178, 0.69);
   }
 
   .card-textarea{
-    width: 280px;
+    width: 270px;
     height: 110px;
     border-radius: 20px;
     font-family: Aleo,sans-serif;
