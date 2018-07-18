@@ -5,12 +5,12 @@
                 <el-form-item class="action-el">
                     <span slot="label" class="action-label">Action</span>
                 </el-form-item>
-                <el-input placeholder="Pls input actions here..." type="textarea" :rows="30"
+                <el-input id="action-textarea" placeholder="Pls input actions here..." type="textarea" :rows="30"
                           v-model="form.desc"></el-input>
                 <el-form-item size="large">
                     <el-button class="createBtn" type="primary" @click="onSubmit">Create
                     </el-button>
-                    <el-button>Reset</el-button>
+                    <el-button @click="reset">Reset</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -54,9 +54,12 @@
                 }
                 this.isActive = !this.isActive;
             },
-            onSubmit() {
+            onSubmit: function() {
                 console.log('submit!');
                 console.log(this.form.desc);
+            },
+            reset: function() {
+                document.getElementById("action-textarea").value = "";
             }
         }
     }
