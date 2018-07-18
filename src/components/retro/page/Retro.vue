@@ -259,21 +259,21 @@
       },
 
       //https://www.cnblogs.com/bianzy/p/5822426.html
-      initWebSocket(){
-        if(typeof (WebSocket) === 'undefined'){
+      initWebSocket() {
+        if (typeof (WebSocket) === 'undefined') {
           console.log("您的浏览器不支持WebSocket");
-        }else{
+        } else {
           console.log("您的浏览器支持WebSocket");
           let _this = this;
           //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-          this.socket =  new WebSocket("ws://146.222.43.190:8090/websocket")
-          this.socket.onopen = ()=>{
+          this.socket = new WebSocket("ws://146.222.43.190:8090/websocket")
+          this.socket.onopen = () => {
             console.log("Socket 已打开");
             this.socket.send(this.public.wellCards);
           }
 
           //获得消息事件
-          this.socket.onmessage = function(msg) {
+          this.socket.onmessage = function (msg) {
             console.dir("Receive from backend.....")
             let message = JSON.parse(msg.data)
             console.log(message);
@@ -282,9 +282,18 @@
           };
 
           //连接关闭的回调方法
-          this.socket.onclose = function(){
+          this.socket.onclose = function () {
             console.log("I am closing")
-          }
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function () {
+              _this.socket.close();
+            }
+          };
+            // 路由跳转时结束websocket链接
+            this.$router.afterEach(function () {
+              _this.socket.close()
+            })
         }
       }
     },
@@ -310,6 +319,11 @@
       this.initWebSocket();
     }
   }
+
+  window.onbeforeunload = function(event) {
+    console.log('您正在刷新网页');
+    return 'Are you sure?';
+  };
 </script>
 
 <style lang="scss">
