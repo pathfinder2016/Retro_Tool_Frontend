@@ -9,11 +9,23 @@
               <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
             </div>
           </div>
-          <Kanban :options="dropOptions" :list="public.wellCards"></Kanban>
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @end="handle_move_to_public_well">
+              <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
         </div>
         <div class="kanban private_area">
           <el-button @click="add_private_well_card">+</el-button>
-          <Kanban :options="dropOptions" :list="private.wellCards"></Kanban>
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="private.wellCards">
+              <div class="box-card" v-for="card in private.wellCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
         </div>
       </div>
 
@@ -25,11 +37,27 @@
               <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
             </div>
           </div>
-          <Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>
+
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.notWellCards">
+              <div class="box-card" v-for="card in public.notWellCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
+
+          <!--<Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>-->
         </div>
         <div class="kanban private_area">
           <el-button @click="add_private_not_well_card">+</el-button>
-          <Kanban :options="dropOptions" :list="private.notWellCards"></Kanban>
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="private.notWellCards">
+              <div class="box-card" v-for="card in private.notWellCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
+          <!--<Kanban :options="dropOptions" :list="private.notWellCards"></Kanban>-->
         </div>
       </div>
 
@@ -41,11 +69,25 @@
               <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
             </div>
           </div>
-          <Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.suggestionCards">
+              <div class="box-card" v-for="card in public.suggestionCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
+          <!--<Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>-->
         </div>
         <div class="kanban private_area">
           <el-button @click="add_private_suggestion_card">+</el-button>
-          <Kanban :options="dropOptions" :list="private.suggestionCards"></Kanban>
+          <div class="board-column">
+            <draggable class="board-column-content" :options="dropOptions" :list="private.suggestionCards">
+              <div class="box-card" v-for="card in private.suggestionCards" :key="card.order" >
+                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+              </div>
+            </draggable>
+          </div>
+          <!--<Kanban :options="dropOptions" :list="private.suggestionCards"></Kanban>-->
         </div>
       </div>
     </div>
@@ -56,8 +98,11 @@
   import Kanban from '../component/Kanban'
   import retroService from '../service/retroService'
   import Constant from "@/common/constant/constant"
+  import draggable from 'vuedraggable'
+
   export default {
     components: {
+      draggable,
       Kanban
     },
 
@@ -88,6 +133,9 @@
     },
 
     methods: {
+      handle_move_to_public_well(){
+        console.log('handle_move_to_public_well')
+      },
       well_card_full_screen_handler() {
         if (this.isFullscreen) {
           this.displayStyle.suggestionBoard = "display:block"
@@ -267,6 +315,69 @@
 </script>
 
 <style lang="scss">
+
+  .box-card {
+    margin: 1px;
+    padding: 5px 5px 5px 5px;
+    width: 280px;
+    height: 120px;
+    border-radius: 20px;
+    background-color: rgba(255, 221, 178, 0.69);
+  }
+
+  .card-textarea{
+    width: 270px;
+    height: 110px;
+    border-radius: 20px;
+    font-family: Aleo,sans-serif;
+    background:rgba(225, 225, 225, 0.69);
+    font-size: 18px;
+  }
+
+  .board-column-content {
+    height: auto;
+    overflow: hidden;
+    border: 1px solid transparent;
+    min-height: 60px;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+
+  .board-column {
+    min-width: 620px;
+    min-height: 500px;
+    height: auto;
+    overflow: hidden;
+    border-radius: 3px; //圆角边框
+
+    .board-column-header {
+      height: 50px;
+      line-height: 50px;
+      overflow: hidden;
+      padding: 0 20px;
+      text-align: center;
+      background: #333;
+      color: #fff;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .board-column-content {
+      height: auto;
+      overflow: hidden;
+      border: 1px solid transparent;
+      min-height: 60px;
+      display: inline-flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      align-content: flex-start;
+    }
+  }
   .components-container {
     position: relative;
     height: 100vh;
