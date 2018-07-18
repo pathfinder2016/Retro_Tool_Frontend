@@ -36,13 +36,6 @@
                 isActive: false,
                 isClosed: false,
                 form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
                     desc: ''
                 }
             }
