@@ -59,7 +59,7 @@
                 console.log(this.form.desc);
             },
             reset: function() {
-                document.getElementById("action-textarea").value = "";
+                this.form.desc = '';
             }
         }
     }
