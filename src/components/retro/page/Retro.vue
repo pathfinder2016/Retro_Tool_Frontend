@@ -10,7 +10,7 @@
             </div>
           </div>
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @end="handle_move_to_public_well">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @add="handle_move_to_public_well">
               <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
@@ -135,6 +135,8 @@
     methods: {
       handle_move_to_public_well(){
         console.log('handle_move_to_public_well')
+        retroService.upsertPublicWellCards(this.public.wellCards);
+
       },
       well_card_full_screen_handler() {
         if (this.isFullscreen) {
@@ -228,10 +230,6 @@
         this.public.wellCards = []
         this.public.notWellCards = []
         this.public.suggestionCards = []
-        this.private.wellCards = []
-        this.private.notWellCards = []
-        this.private.suggestionCards = []
-
       },
 
       // 先来粗糙的解决手段，直接全部全刷新
@@ -268,7 +266,7 @@
           console.log("您的浏览器支持WebSocket");
           let _this = this;
           //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-          this.socket =  new WebSocket("ws://localhost:8090/websocket")
+          this.socket =  new WebSocket("ws://146.222.43.190:8090/websocket")
           this.socket.onopen = ()=>{
             console.log("Socket 已打开");
             this.socket.send(this.public.wellCards);
@@ -292,11 +290,11 @@
     },
 
     watch:{
-      'public.wellCards': function () {
-        console.log("public.wellCards")
-        console.dir(this.public.wellCards)
-        retroService.upsertPublicWellCards(this.public.wellCards);
-      },
+      // 'public.wellCards': function () {
+      //   console.log("public.wellCards")
+      //   console.dir(this.public.wellCards)
+      //   retroService.upsertPublicWellCards(this.public.wellCards);
+      // },
 
       'public.notWellCards': function () {
         console.dir(this.public.notWellCards)
