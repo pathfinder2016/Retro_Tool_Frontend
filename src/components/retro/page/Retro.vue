@@ -13,6 +13,7 @@
             <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @add="handle_move_to_public_well">
               <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+                <i class="el-icon-delete "></i>
               </div>
             </draggable>
           </div>
@@ -95,15 +96,13 @@
 </template>
 
 <script>
-  import Kanban from '../component/Kanban'
   import retroService from '../service/retroService'
   import Constant from "@/common/constant/constant"
   import draggable from 'vuedraggable'
 
   export default {
     components: {
-      draggable,
-      Kanban
+      draggable
     },
 
     data() {
@@ -333,6 +332,7 @@
     height: 120px;
     border-radius: 20px;
     background-color: rgba(255, 221, 178, 0.69);
+    display: inline-flex;
   }
 
   .card-textarea{
@@ -463,5 +463,6 @@
       }
     }
   }
+
 
 </style>
