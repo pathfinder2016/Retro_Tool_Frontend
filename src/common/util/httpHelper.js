@@ -9,7 +9,7 @@ const post = async(url, params) =>{
 }
 
 const del = async(url, params) =>{
-  return await axios.delete(url, params);
+  return await axios.post(url, params);
 }
 
 const put = async(url, params) =>{

@@ -13,7 +13,8 @@
             <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @add="handle_move_to_public_well">
               <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
-                <i class="el-icon-delete "></i>
+                <i class="el-icon-delete el_owner" @click="well_card_remove_handler(card)"></i>
+
               </div>
             </draggable>
           </div>
@@ -97,6 +98,7 @@
 
 <script>
   import retroService from '../service/retroService'
+  import cardService from '../service/cardService'
   import Constant from "@/common/constant/constant"
   import draggable from 'vuedraggable'
 
@@ -137,6 +139,12 @@
         retroService.upsertPublicWellCards(this.public.wellCards);
 
       },
+
+      well_card_remove_handler(card){
+       this.public.wellCards.splice(card, 1)
+        cardService.del(card, Constant.CARD_TYPE.WELL)
+      },
+
       well_card_full_screen_handler() {
         if (this.isFullscreen) {
           this.displayStyle.suggestionBoard = "display:block"
@@ -170,13 +178,14 @@
         this.isFullscreen = !this.isFullscreen;
       },
 
-      add_public_well_card(content){
+      add_public_well_card(card){
         this.cardNum = this.cardNum + 1
         this.public.wellCards.push({
-          type: Constant.CARD_TYPE.WELL,
+          type: card.type,
           order: this.cardNum,
           // isPrivate: false,
-          content: content
+          content: card.content,
+          id: card.id
         })
       },
 
@@ -234,24 +243,13 @@
       // 先来粗糙的解决手段，直接全部全刷新
       refresh(cards){
         this.reset();
-        cards.forEach((card, index)=>{
-          // if(card.type === 'WELL'){
-          //   let sameArray = _this.public.wellCards.filter((currentValue) =>{
-          //     return (currentValue.content === card.content) //内容，类型一样
-          //   })
-          //   if(sameArray === 'undefined' || sameArray.length === 0){
-          //     this.add_public_well_card(sameArray[0].content)
-          //   }
-          // }
-
+        cards.forEach((card)=>{
           if(card.type === Constant.CARD_TYPE.WELL){
-              this.add_public_well_card(card.content)
+              this.add_public_well_card(card)
           }else if(card.type === Constant.CARD_TYPE.NOT_WELL){
             this.add_public_not_well_card(card.content)
           }else if(card.type === Constant.CARD_TYPE.SUGGESTION){
             this.add_public_suggestion_card(card.content)
-          }else{
-
           }
         })
 
@@ -330,17 +328,18 @@
     padding: 5px 5px 5px 5px;
     width: 280px;
     height: 120px;
-    border-radius: 20px;
+    border-radius: 5px;
     background-color: rgba(255, 221, 178, 0.69);
     display: inline-flex;
   }
 
   .card-textarea{
-    width: 270px;
-    height: 110px;
-    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    border: 0px;
     font-family: Aleo,sans-serif;
-    background:rgba(225, 225, 225, 0.69);
+    background-color: rgba(255, 221, 178, 0.69);
     font-size: 18px;
   }
 
@@ -407,6 +406,10 @@
     display: flex;
     width: 100%;
     flex-direction: row;
+  }
+
+  .el_owner{
+    background-color: rgba(255, 221, 178, 0.69);
   }
 
   .my-handle {
