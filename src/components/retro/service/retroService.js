@@ -13,7 +13,17 @@ const findAllCards = async () =>{
   return await retroRepository.findAll()
 }
 
+const createAction = async(action) => {
+    return await retroRepository.createAction(action)
+}
+
+const loadActionContent = async(retroKey) => {
+    return await retroRepository.loadActionContent(retroKey)
+}
+
 export default {
   upsertPublicWellCards: upsertPublicWellCards,
-  findAllCards: findAllCards
+  findAllCards: findAllCards,
+    createAction: createAction,
+    loadActionContent: loadActionContent
 }
