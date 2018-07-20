@@ -14,7 +14,6 @@
               <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
                 <i class="el-icon-delete el_owner" @click="well_card_remove_handler(card)"></i>
-
               </div>
             </draggable>
           </div>
@@ -41,9 +40,10 @@
           </div>
 
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.notWellCards">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.notWellCards" @add="handle_move_to_public_not_well">
               <div class="box-card" v-for="card in public.notWellCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+                <i class="el-icon-delete el_owner" @click="not_well_card_remove_handler(card)"></i>
               </div>
             </draggable>
           </div>
@@ -72,9 +72,10 @@
             </div>
           </div>
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.suggestionCards">
+            <draggable class="board-column-content" :options="dropOptions" :list="public.suggestionCards" @add="handle_move_to_public_suggestion">
               <div class="box-card" v-for="card in public.suggestionCards" :key="card.order" >
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+                <i class="el-icon-delete el_owner" @click="suggestion_card_remove_handler(card)"></i>
               </div>
             </draggable>
           </div>
@@ -136,13 +137,33 @@
     methods: {
       handle_move_to_public_well(){
         console.log('handle_move_to_public_well')
-        retroService.upsertPublicWellCards(this.public.wellCards);
+        cardService.upsertPublicWellCards(this.public.wellCards);
 
+      },
+
+      handle_move_to_public_not_well(){
+        console.log('handle_move_to_public_not_well')
+        cardService.upsertPublicNotWellCards(this.public.notWellCards);
+      },
+
+      handle_move_to_public_suggestion(){
+        console.log('handle_move_to_public_suggestion')
+        cardService.upsertPublicSuggestionCards(this.public.suggestionCards);
       },
 
       well_card_remove_handler(card){
        this.public.wellCards.splice(card, 1)
         cardService.del(card, Constant.CARD_TYPE.WELL)
+      },
+
+      not_well_card_remove_handler(card){
+        this.public.notWellCards.splice(card, 1)
+        cardService.del(card, Constant.CARD_TYPE.NOT_WELL)
+      },
+
+      suggestion_card_remove_handler(card){
+        this.public.suggestionCards.splice(card, 1)
+        cardService.del(card, Constant.CARD_TYPE.SUGGESTION)
       },
 
       well_card_full_screen_handler() {
@@ -183,29 +204,28 @@
         this.public.wellCards.push({
           type: card.type,
           order: this.cardNum,
-          // isPrivate: false,
           content: card.content,
           id: card.id
         })
       },
 
-      add_public_not_well_card(content){
+      add_public_not_well_card(card){
         this.cardNum = this.cardNum + 1
         this.public.notWellCards.push({
-          type: Constant.CARD_TYPE.NOT_WELL,
+          type: card.type,
           order: this.cardNum,
-          // isPrivate: false,
-          content: content
+          content: card.content,
+          id: card.id
         })
       },
 
-      add_public_suggestion_card(content){
+      add_public_suggestion_card(card){
         this.cardNum = this.cardNum + 1
         this.public.suggestionCards.push({
-          type: Constant.CARD_TYPE.SUGGESTION,
+          type: card.type,
           order: this.cardNum,
-          // isPrivate: false,
-          content: content
+          content: card.content,
+          id: card.id
         })
       },
 
@@ -242,17 +262,15 @@
 
       // 先来粗糙的解决手段，直接全部全刷新
       refresh(cards){
-        this.reset();
         cards.forEach((card)=>{
           if(card.type === Constant.CARD_TYPE.WELL){
-              this.add_public_well_card(card)
+            this.add_public_well_card(card)
           }else if(card.type === Constant.CARD_TYPE.NOT_WELL){
-            this.add_public_not_well_card(card.content)
+            this.add_public_not_well_card(card)
           }else if(card.type === Constant.CARD_TYPE.SUGGESTION){
-            this.add_public_suggestion_card(card.content)
+            this.add_public_suggestion_card(card)
           }
         })
-
       },
 
       //https://www.cnblogs.com/bianzy/p/5822426.html
@@ -272,9 +290,12 @@
           //获得消息事件
           this.socket.onmessage = function (msg) {
             console.dir("Receive from backend.....")
-            let message = JSON.parse(msg.data)
-            console.log(message);
-            _this.refresh(message)
+            let cards = JSON.parse(msg.data)
+            console.log(cards);
+            if(cards.length > 0){
+              _this.reset()
+              _this.refresh(cards)
+            }
             //发现消息进入    调后台获取
           };
 
