@@ -314,22 +314,6 @@
       }
     },
 
-    watch:{
-      // 'public.wellCards': function () {
-      //   console.log("public.wellCards")
-      //   console.dir(this.public.wellCards)
-      //   retroService.upsertPublicWellCards(this.public.wellCards);
-      // },
-
-      'public.notWellCards': function () {
-        console.dir(this.public.notWellCards)
-      },
-
-      'public.suggestionCards': function () {
-        console.dir(this.public.suggestionCards)
-      }
-    },
-
     mounted(){
       //Access websocket
       this.initWebSocket();
