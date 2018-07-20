@@ -5,8 +5,9 @@
                 <el-form-item class="action-el">
                     <span slot="label" class="action-label">Action</span>
                 </el-form-item>
-                <el-input id="action-textarea" placeholder="Pls input actions here..." type="textarea" :rows="30"
-                          v-model="form.desc"></el-input>
+                <el-input name="actionContent" id="action-textarea" class="action-textarea" placeholder="Pls input actions here..."
+                          type="textarea" :rows="30"
+                          v-model="form.actionContent"></el-input>
                 <el-form-item size="large">
                     <el-button class="createBtn" type="primary" @click="onSubmit">Create
                     </el-button>
@@ -29,6 +30,8 @@
 </template>
 
 <script>
+    import retroService from '../service/retroService'
+
     export default {
         name: 'Action',
         data: function () {
@@ -36,9 +39,13 @@
                 isActive: false,
                 isClosed: false,
                 form: {
-                    desc: ''
+                    retroKey: "I14",
+                    actionContent: ''
                 }
             }
+        },
+        mounted: async function () {
+            await this.loadActionContent();
         },
         methods: {
             hamburgerCross: function () {
@@ -54,12 +61,23 @@
                 }
                 this.isActive = !this.isActive;
             },
-            onSubmit: function() {
-                console.log('submit!');
-                console.log(this.form.desc);
+
+            loadActionContent: async function () {
+                let result = await retroService.loadActionContent({retroKey: 'I14'});
+                this.form.retroKey = result.retroKey;
+                this.form.actionContent = result.actionContent
             },
-            reset: function() {
-                this.form.desc = '';
+
+            onSubmit: function () {
+                console.log('submit!');
+                let action = {
+                    retroKey: 'I14',
+                    actionContent: this.form.actionContent
+                }
+                retroService.createAction(action);
+            },
+            reset: function () {
+                this.form.actionContent = '';
             }
         }
     }
@@ -68,7 +86,12 @@
 
 <style>
 
-    .action-el{
+    .action-textarea {
+        font-size: 20px;
+        font-family: 'Microsoft YaHei'
+    }
+
+    .action-el {
         margin-top: 30px
     }
 
