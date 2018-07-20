@@ -6,7 +6,7 @@
                     <span slot="label" class="action-label">Action</span>
                 </el-form-item>
                 <el-input name="actionContent" id="action-textarea" class="action-textarea" placeholder="Pls input actions here..."
-                          type="textarea" :rows="30"
+                          type="textarea" :rows="24"
                           v-model="form.actionContent"></el-input>
                 <el-form-item size="large">
                     <el-button class="createBtn" type="primary" @click="onSubmit">Create
@@ -97,7 +97,9 @@
 
     .action-label {
         font-size: xx-large;
+        color: #15ff06;
         margin: 30px;
+        font-family: 微软雅黑;
     }
 
     .createBtn {
@@ -128,7 +130,7 @@
     }
 
     #wrapper.toggled #sidebar-wrapper {
-        width: 420px
+        width: 34%
     }
 
     #wrapper.toggled #page-content-wrapper {
@@ -140,7 +142,7 @@
         -moz-transition: all .5s ease;
         -o-transition: all .5s ease;
         -webkit-transition: all .5s ease;
-        background: rgba(56, 68, 76, 0.49);
+        background: rgb(0, 0, 0);
         height: 100%;
         left: 420px;
         margin-left: -420px;
@@ -164,7 +166,7 @@
         border: 0;
         display: block;
         height: 32px;
-        margin-left: 15px;
+        margin-left: 12%;
         position: fixed;
         top: 20px;
         width: 32px;
@@ -194,7 +196,7 @@
         line-height: 32px;
         opacity: 0;
         text-align: center;
-        width: 100px
+        width: 100px;
     }
 
     .hamburger.is-closed:hover before {
@@ -206,7 +208,7 @@
 
     .hamburger.is-closed:hover .hamb-top {
         -webkit-transition: all .35s ease-in-out;
-        top: 0
+        top: 0;
     }
 
     .hamburger.is-closed:hover .hamb-bottom {
@@ -217,7 +219,7 @@
     .hamburger.is-closed .hamb-top {
         -webkit-transition: all .35s ease-in-out;
         background-color: rgba(255, 255, 255, .7);
-        top: 5px
+        top: 5px;
     }
 
     .hamburger.is-closed .hamb-middle {

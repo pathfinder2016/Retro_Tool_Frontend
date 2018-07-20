@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Action></Action>
     <div id="retro_card_id" class="components-container board">
       <div class="kanban_header" :style="displayStyle.wellBoard">
         <div class="kanban well">
@@ -102,10 +103,12 @@
   import cardService from '../service/cardService'
   import Constant from "@/common/constant/constant"
   import draggable from 'vuedraggable'
+  import Action from '../component/Action'
 
   export default {
     components: {
-      draggable
+      draggable,
+      Action
     },
 
     data() {

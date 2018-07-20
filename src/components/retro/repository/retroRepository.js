@@ -10,11 +10,11 @@ const findAll = async ()=>{
 }
 
 const createAction = async (action)=>{
-    return await httpHelper.post('http://146.222.81.139:8090/action/create', action)
+    return await httpHelper.post('http://146.222.43.190:8090/action/create', action)
 }
 
 const loadActionContent = async (retroKey)=>{
-  let result = await httpHelper.get('http://146.222.81.139:8090/action/load', retroKey)
+  let result = await httpHelper.get('http://146.222.43.190:8090/action/load', retroKey)
     return result.data
 }
 
