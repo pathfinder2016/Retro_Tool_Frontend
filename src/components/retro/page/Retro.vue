@@ -1,29 +1,26 @@
 <template>
   <div>
     <Action></Action>
-    <div id="retro_card_id" class="components-container board">
-      <div class="kanban_header" :style="displayStyle.wellBoard">
-        <div class="kanban well">
-          <div class="board-column-header">
-            <div >Well</div>
-            <div>
-              <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
-            </div>
-          </div>
-          <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.wellCards" @add="handle_move_to_public_well">
-              <div class="box-card" v-for="card in public.wellCards" :key="card.order" >
-                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
-                <i class="el-icon-delete el_owner" @click="well_card_remove_handler(card)"></i>
-              </div>
-            </draggable>
+    <div class="components-container">
+      <div class="board-column" :style="displayStyle.wellBoard">
+        <div class="well-board-column-header">
+          <div>Well</div>
+          <div>
+            <el-button round class="el-icon-rank" @click="well_card_full_screen_handler"></el-button>
           </div>
         </div>
-        <div class="kanban private_area">
+        <draggable class="public-board-column-content" :options="dropOptions" :list="public.wellCards"
+                   @add="handle_move_to_public_well">
+          <div class="box-card" v-for="card in public.wellCards" :key="card.order">
+            <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+            <i class="el-icon-delete operation-column-area" @click="well_card_remove_handler(card)"></i>
+          </div>
+        </draggable>
+        <div class="private_area">
           <el-button @click="add_private_well_card">+</el-button>
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="private.wellCards">
-              <div class="box-card" v-for="card in private.wellCards" :key="card.order" >
+            <draggable class="private-board-column-content" :options="dropOptions" :list="private.wellCards">
+              <div class="box-card" v-for="card in private.wellCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
@@ -31,67 +28,55 @@
         </div>
       </div>
 
-      <div class="kanban_header" :style="displayStyle.notWellBoard">
-        <div class="kanban notwell">
-          <div class="board-column-header">
-            <div>Not Well</div>
-            <div>
-              <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
-            </div>
+      <div class="board-column" :style="displayStyle.wellBoard">
+        <div class="notwell-board-column-header">
+          <div>Not Well</div>
+          <div>
+            <el-button round class="el-icon-rank" @click="not_well_card_full_screen_handler"></el-button>
           </div>
-
-          <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.notWellCards" @add="handle_move_to_public_not_well">
-              <div class="box-card" v-for="card in public.notWellCards" :key="card.order" >
-                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
-                <i class="el-icon-delete el_owner" @click="not_well_card_remove_handler(card)"></i>
-              </div>
-            </draggable>
-          </div>
-
-          <!--<Kanban header-text="Not Well" class="kanban notwell" :options="dropOptions" :list="public.notWellCards"></Kanban>-->
         </div>
-        <div class="kanban private_area">
+        <draggable class="public-board-column-content" :options="dropOptions" :list="public.notWellCards"
+                   @add="handle_move_to_public_not_well">
+          <div class="box-card" v-for="card in public.notWellCards" :key="card.order">
+            <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+            <i class="el-icon-delete operation-column-area" @click="not_well_card_remove_handler(card)"></i>
+          </div>
+        </draggable>
+        <div class="private_area">
           <el-button @click="add_private_not_well_card">+</el-button>
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="private.notWellCards">
-              <div class="box-card" v-for="card in private.notWellCards" :key="card.order" >
+            <draggable class="private-board-column-content" :options="dropOptions" :list="private.notWellCards">
+              <div class="box-card" v-for="card in private.notWellCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
           </div>
-          <!--<Kanban :options="dropOptions" :list="private.notWellCards"></Kanban>-->
         </div>
       </div>
 
-      <div class="kanban_header" :style="displayStyle.suggestionBoard">
-        <div class="kanban suggestion">
-          <div class="board-column-header">
-            <div>Suggestion</div>
-            <div>
-              <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
-            </div>
+      <div class="board-column" :style="displayStyle.suggestionCards">
+        <div class="suggestion-board-column-header">
+          <div>Well</div>
+          <div>
+            <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
           </div>
-          <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="public.suggestionCards" @add="handle_move_to_public_suggestion">
-              <div class="box-card" v-for="card in public.suggestionCards" :key="card.order" >
-                <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
-                <i class="el-icon-delete el_owner" @click="suggestion_card_remove_handler(card)"></i>
-              </div>
-            </draggable>
-          </div>
-          <!--<Kanban header-text="Suggestion" class="kanban suggestion" :options="dropOptions" :list="public.suggestionCards"></Kanban>-->
         </div>
-        <div class="kanban private_area">
+        <draggable class="public-board-column-content" :options="dropOptions" :list="public.suggestionCards"
+                   @add="handle_move_to_public_suggestion">
+          <div class="box-card" v-for="card in public.suggestionCards" :key="card.order">
+            <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
+            <i class="el-icon-delete operation-column-area" @click="suggestion_card_remove_handler(card)"></i>
+          </div>
+        </draggable>
+        <div class="private_area">
           <el-button @click="add_private_suggestion_card">+</el-button>
           <div class="board-column">
-            <draggable class="board-column-content" :options="dropOptions" :list="private.suggestionCards">
-              <div class="box-card" v-for="card in private.suggestionCards" :key="card.order" >
+            <draggable class="private-board-column-content" :options="dropOptions" :list="private.suggestionCards">
+              <div class="box-card" v-for="card in private.suggestionCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
           </div>
-          <!--<Kanban :options="dropOptions" :list="private.suggestionCards"></Kanban>-->
         </div>
       </div>
     </div>
@@ -99,7 +84,6 @@
 </template>
 
 <script>
-  import retroService from '../service/retroService'
   import cardService from '../service/cardService'
   import Constant from "@/common/constant/constant"
   import draggable from 'vuedraggable'
@@ -133,38 +117,38 @@
           suggestionCards: []
         },
         cardNum: 0,
-        socket:{}
+        socket: {}
       }
     },
 
     methods: {
-      handle_move_to_public_well(){
+      handle_move_to_public_well() {
         console.log('handle_move_to_public_well')
         cardService.upsertPublicWellCards(this.public.wellCards);
 
       },
 
-      handle_move_to_public_not_well(){
+      handle_move_to_public_not_well() {
         console.log('handle_move_to_public_not_well')
         cardService.upsertPublicNotWellCards(this.public.notWellCards);
       },
 
-      handle_move_to_public_suggestion(){
+      handle_move_to_public_suggestion() {
         console.log('handle_move_to_public_suggestion')
         cardService.upsertPublicSuggestionCards(this.public.suggestionCards);
       },
 
-      well_card_remove_handler(card){
-       this.public.wellCards.splice(card, 1)
+      well_card_remove_handler(card) {
+        this.public.wellCards.splice(card, 1)
         cardService.del(card, Constant.CARD_TYPE.WELL)
       },
 
-      not_well_card_remove_handler(card){
+      not_well_card_remove_handler(card) {
         this.public.notWellCards.splice(card, 1)
         cardService.del(card, Constant.CARD_TYPE.NOT_WELL)
       },
 
-      suggestion_card_remove_handler(card){
+      suggestion_card_remove_handler(card) {
         this.public.suggestionCards.splice(card, 1)
         cardService.del(card, Constant.CARD_TYPE.SUGGESTION)
       },
@@ -202,7 +186,7 @@
         this.isFullscreen = !this.isFullscreen;
       },
 
-      add_public_well_card(card){
+      add_public_well_card(card) {
         this.cardNum = this.cardNum + 1
         this.public.wellCards.push({
           type: card.type,
@@ -212,7 +196,7 @@
         })
       },
 
-      add_public_not_well_card(card){
+      add_public_not_well_card(card) {
         this.cardNum = this.cardNum + 1
         this.public.notWellCards.push({
           type: card.type,
@@ -222,7 +206,7 @@
         })
       },
 
-      add_public_suggestion_card(card){
+      add_public_suggestion_card(card) {
         this.cardNum = this.cardNum + 1
         this.public.suggestionCards.push({
           type: card.type,
@@ -256,7 +240,7 @@
         })
       },
 
-      reset(){
+      reset() {
         this.cardNum = 0
         this.public.wellCards = []
         this.public.notWellCards = []
@@ -264,13 +248,13 @@
       },
 
       // 先来粗糙的解决手段，直接全部全刷新
-      refresh(cards){
-        cards.forEach((card)=>{
-          if(card.type === Constant.CARD_TYPE.WELL){
+      refresh(cards) {
+        cards.forEach((card) => {
+          if (card.type === Constant.CARD_TYPE.WELL) {
             this.add_public_well_card(card)
-          }else if(card.type === Constant.CARD_TYPE.NOT_WELL){
+          } else if (card.type === Constant.CARD_TYPE.NOT_WELL) {
             this.add_public_not_well_card(card)
-          }else if(card.type === Constant.CARD_TYPE.SUGGESTION){
+          } else if (card.type === Constant.CARD_TYPE.SUGGESTION) {
             this.add_public_suggestion_card(card)
           }
         })
@@ -295,7 +279,7 @@
             console.dir("Receive from backend.....")
             let cards = JSON.parse(msg.data)
             console.log(cards);
-            if(cards.length > 0){
+            if (cards.length > 0) {
               _this.reset()
               _this.refresh(cards)
             }
@@ -317,48 +301,80 @@
       }
     },
 
-    mounted(){
+    mounted() {
       //Access websocket
       let a = 1;
-      if( a === 1){
+      if (a === 1) {
         this.initWebSocket();
       }
     }
   }
-
-  window.onbeforeunload = function(event) {
-    console.log('您正在刷新网页');
-    return 'Are you sure?';
-  };
 </script>
 
 <style lang="scss">
+  .components-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .board-column {
+    min-width: 33.3%;
+    min-height: 500px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .well-board-column-header {
+    background: #4A9FF9;
+  }
+
+  .notwell-board-column-header {
+    background: #f9944a;
+  }
+
+  .suggestion-board-column-header {
+    background: #2ac06d;
+  }
+
+  .public-board-column-content {
+    border: 1px dashed;
+    height: 580px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .private_area {
+    height: 300px;
+  }
 
   .box-card {
     margin: 1px;
     padding: 5px 5px 5px 5px;
     width: 290px;
     height: 130px;
-    border-radius: 5px;
     background-color: rgba(255, 221, 178, 0.69);
     display: inline-flex;
   }
 
-  .card-textarea{
+  .card-textarea {
     width: 100%;
     height: 100%;
-    border-radius: 5px;
-    border: 0px;
-    font-family: Aleo,sans-serif;
+    border: 0;
+    font-family: Aleo, sans-serif;
     background-color: rgba(255, 221, 178, 0.69);
     font-size: 18px;
   }
 
-  .board-column-content {
+  .private-board-column-content {
     height: auto;
     overflow: hidden;
-    border: 1px solid transparent;
-    min-height: 60px;
+    border: 1px dashed;
+    min-height: 260px;
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -367,118 +383,7 @@
     align-content: flex-start;
   }
 
-  .board-column {
-    min-width: 620px;
-    min-height: 500px;
-    height: auto;
-    overflow: hidden;
-    border-radius: 3px; //圆角边框
-
-    .board-column-header {
-      height: 50px;
-      line-height: 50px;
-      overflow: hidden;
-      padding: 0 20px;
-      text-align: center;
-      background: #333;
-      color: #fff;
-      border-radius: 3px 3px 0 0;
-    }
-
-    .board-column-content {
-      height: auto;
-      overflow: hidden;
-      border: 1px solid transparent;
-      min-height: 60px;
-      display: inline-flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      align-content: flex-start;
-    }
-  }
-  .components-container {
-    position: relative;
-    height: 100vh;
-    width: 100px;
-  }
-
-  .board {
-    width: 100%;
-    margin-left: 10px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  #retro_card_id {
-    display: -webkit-flex;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: row;
-  }
-
-  .el_owner{
+  .operation-column-area {
     background-color: rgba(255, 221, 178, 0.69);
   }
-
-  .my-handle {
-    cursor: move;
-    cursor: -webkit-grabbing;
-  }
-
-  .list-group-item {
-    cursor: move;
-  }
-
-  .kanban {
-    &.well {
-      .board-column-header {
-        background: #4A9FF9;
-      }
-      .board-column-content{
-        border: 1px dashed;
-        min-width: 620px;
-        height: 500px;
-        overflow-y:auto;
-      }
-    }
-
-    &.private_area {
-      .board-column-content{
-        border: 1px dashed;
-        min-width: 620px;
-        height: 270px;
-        overflow-y:auto;
-      }
-    }
-
-    &.notwell {
-      .board-column-header {
-        background: #f9944a;
-      }
-      .board-column-content{
-        border: 1px dashed;
-        min-width: 620px;
-        height: 500px;
-        overflow-y:auto;
-      }
-    }
-    &.suggestion {
-      .board-column-header {
-        background: #2ac06d;
-      }
-      .board-column-content{
-        border: 1px dashed;
-        min-width: 620px;
-        height: 500px;
-        overflow-y:auto;
-      }
-    }
-  }
-
-
 </style>
