@@ -319,7 +319,10 @@
 
     mounted(){
       //Access websocket
-      this.initWebSocket();
+      let a = 1;
+      if( a === 1){
+        this.initWebSocket();
+      }
     }
   }
 
@@ -334,8 +337,8 @@
   .box-card {
     margin: 1px;
     padding: 5px 5px 5px 5px;
-    width: 280px;
-    height: 120px;
+    width: 290px;
+    height: 130px;
     border-radius: 5px;
     background-color: rgba(255, 221, 178, 0.69);
     display: inline-flex;
@@ -398,10 +401,11 @@
   .components-container {
     position: relative;
     height: 100vh;
+    width: 100px;
   }
 
   .board {
-    width: 1000px;
+    width: 100%;
     margin-left: 10px;
     display: flex;
     justify-content: space-around;
@@ -413,6 +417,7 @@
     display: -webkit-flex;
     display: flex;
     width: 100%;
+    height: 100%;
     flex-direction: row;
   }
 
