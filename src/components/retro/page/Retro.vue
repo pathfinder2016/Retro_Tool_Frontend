@@ -88,6 +88,7 @@
   import Constant from "@/common/constant/constant"
   import draggable from 'vuedraggable'
   import Action from '../component/Action'
+  import WebsocketHandler from '../service/WebsocketHandler'
 
   export default {
     components: {
@@ -117,7 +118,8 @@
           suggestionCards: []
         },
         cardNum: 0,
-        socket: {}
+        socket: {},
+        websocketServerUrl: "ws://146.222.43.190:8090/websocket"
       }
     },
 
@@ -219,9 +221,7 @@
       add_private_well_card() {
         this.cardNum = this.cardNum + 1
         this.private.wellCards.push({
-          // type: Constant.CARD_TYPE.WELL, //meaningless: because user can change the card between kanbans
           order: this.cardNum,
-          // isPrivate: false,
           content: ''
         })
       },
@@ -247,8 +247,8 @@
         this.public.suggestionCards = []
       },
 
-      // 先来粗糙的解决手段，直接全部全刷新
       refresh(cards) {
+        this.reset()
         cards.forEach((card) => {
           if (card.type === Constant.CARD_TYPE.WELL) {
             this.add_public_well_card(card)
@@ -260,53 +260,10 @@
         })
       },
 
-      //https://www.cnblogs.com/bianzy/p/5822426.html
-      initWebSocket() {
-        if (typeof (WebSocket) === 'undefined') {
-          console.log("您的浏览器不支持WebSocket");
-        } else {
-          console.log("您的浏览器支持WebSocket");
-          let _this = this;
-          //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-          this.socket = new WebSocket("ws://146.222.43.190:8090/websocket")
-          this.socket.onopen = () => {
-            console.log("Socket 已打开");
-            this.socket.send(this.public.wellCards);
-          }
-
-          //获得消息事件
-          this.socket.onmessage = function (msg) {
-            console.dir("Receive from backend.....")
-            let cards = JSON.parse(msg.data)
-            console.log(cards);
-            if (cards.length > 0) {
-              _this.reset()
-              _this.refresh(cards)
-            }
-            //发现消息进入    调后台获取
-          };
-
-          //连接关闭的回调方法
-          this.socket.onclose = function () {
-            console.log("I am closing")
-            _this.socket.close();
-
-          }
-
-          this.socket.onerror = function () {
-            _this.socket.close()
-          }
-
-        }
-      }
     },
 
     mounted() {
-      //Access websocket
-      let a = 1;
-      if (a === 1) {
-        this.initWebSocket();
-      }
+      WebsocketHandler.initWebsocket(this.websocketServerUrl, this.refresh)
     }
   }
 </script>
