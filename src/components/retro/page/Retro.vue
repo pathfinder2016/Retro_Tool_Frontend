@@ -2,7 +2,7 @@
   <div>
     <Action></Action>
     <div class="components-container">
-      <div class="board-column" :style="displayStyle.wellBoard">
+      <div class="board-column" v-show="isShowWellBoard">
         <div class="well-board-column-header">
           <div>Well</div>
           <div>
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <div class="board-column" :style="displayStyle.wellBoard">
+      <div class="board-column" v-show="isShowNotWellBoard">
         <div class="notwell-board-column-header">
           <div>Not Well</div>
           <div>
@@ -54,9 +54,9 @@
         </div>
       </div>
 
-      <div class="board-column" :style="displayStyle.suggestionCards">
+      <div class="board-column" v-show="isShowSuggestionBoard">
         <div class="suggestion-board-column-header">
-          <div>Well</div>
+          <div>Suggestion</div>
           <div>
             <el-button round class="el-icon-rank" @click="suggestion_card_full_screen_handler"></el-button>
           </div>
@@ -98,11 +98,9 @@
 
     data() {
       return {
-        displayStyle: {
-          wellBoard: "display:block",
-          notWellBoard: "display:block",
-          suggestionBoard: "display:block"
-        },
+        isShowWellBoard: true,
+        isShowNotWellBoard: true,
+        isShowSuggestionBoard: true,
         isFullscreen: false,
         dropOptions: {
           group: 'retro'
@@ -157,33 +155,36 @@
 
       well_card_full_screen_handler() {
         if (this.isFullscreen) {
-          this.displayStyle.suggestionBoard = "display:block"
-          this.displayStyle.notWellBoard = "display:block"
+          this.isShowWellBoard = true
+          this.isShowNotWellBoard = true
+          this.isShowSuggestionBoard = true
         } else {
-          this.displayStyle.suggestionBoard = "display:none"
-          this.displayStyle.notWellBoard = "display:none"
+          this.isShowNotWellBoard = false
+          this.isShowSuggestionBoard = false
         }
         this.isFullscreen = !this.isFullscreen;
       },
 
       not_well_card_full_screen_handler() {
         if (this.isFullscreen) {
-          this.displayStyle.wellBoard = "display:block"
-          this.displayStyle.suggestionBoard = "display:block"
+          this.isShowWellBoard = true
+          this.isShowNotWellBoard = true
+          this.isShowSuggestionBoard = true
         } else {
-          this.displayStyle.wellBoard = "display:none"
-          this.displayStyle.suggestionBoard = "display:none"
+          this.isShowWellBoard = false
+          this.isShowSuggestionBoard = false
         }
         this.isFullscreen = !this.isFullscreen;
       },
 
       suggestion_card_full_screen_handler() {
         if (this.isFullscreen) {
-          this.displayStyle.wellBoard = "display:block"
-          this.displayStyle.notWellBoard = "display:block"
+          this.isShowWellBoard = true
+          this.isShowNotWellBoard = true
+          this.isShowSuggestionBoard = true
         } else {
-          this.displayStyle.wellBoard = "display:none"
-          this.displayStyle.notWellBoard = "display:none"
+          this.isShowWellBoard = false
+          this.isShowNotWellBoard = false
         }
         this.isFullscreen = !this.isFullscreen;
       },
@@ -259,7 +260,6 @@
           }
         })
       },
-
     },
 
     mounted() {
