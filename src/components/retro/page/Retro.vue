@@ -123,19 +123,18 @@
 
     methods: {
       handle_move_to_public_well() {
-        console.log('handle_move_to_public_well')
-        cardService.upsertPublicWellCards(this.public.wellCards);
-
+        let newAddCards = this.public.wellCards.filter((card)=>{return card.id===undefined});
+        cardService.upsertPublicCards(newAddCards, Constant.CARD_TYPE.WELL);
       },
 
       handle_move_to_public_not_well() {
-        console.log('handle_move_to_public_not_well')
-        cardService.upsertPublicNotWellCards(this.public.notWellCards);
+        let newAddCards = this.public.notWellCards.filter((card)=>{return card.id===undefined});
+        cardService.upsertPublicCards(newAddCards, Constant.CARD_TYPE.NOT_WELL);
       },
 
       handle_move_to_public_suggestion() {
-        console.log('handle_move_to_public_suggestion')
-        cardService.upsertPublicSuggestionCards(this.public.suggestionCards);
+        let newAddCards = this.public.suggestionCards.filter((card)=>{return card.id===undefined});
+        cardService.upsertPublicCards(newAddCards, Constant.CARD_TYPE.SUGGESTION);
       },
 
       well_card_remove_handler(card) {
@@ -252,6 +251,9 @@
         this.reset()
         cards.forEach((card) => {
           if (card.type === Constant.CARD_TYPE.WELL) {
+            // let cardArray = this.public.wellCards.filter((item)=>{return item.id == card.id});
+            // if(cardArray.length != 0)
+            // if(this.public.we)
             this.add_public_well_card(card)
           } else if (card.type === Constant.CARD_TYPE.NOT_WELL) {
             this.add_public_not_well_card(card)
