@@ -1,11 +1,11 @@
 import httpHelper from '../../../common/util/httpHelper'
-
+const host = "http://146.222.43.190:8090"
 const del = async (params)=>{
-  return await httpHelper.del('http://146.222.43.190:8090/card/del', params)
+  return await httpHelper.del(host + '/card/del', params)
 }
 
 const upsertPublicCards = async (list)=>{
-  return await httpHelper.post('http://146.222.43.190:8090/card/public', list)
+  return await httpHelper.post(host + '/card/public', list)
 }
 
 export default {

@@ -1,20 +1,28 @@
 import httpHelper from '../../../common/util/httpHelper'
 
+const host = "http://146.222.43.190:8090"
+
 const upsertPublicWellCards = async (list)=>{
-  return await httpHelper.post('http://146.222.43.190:8090/card/public/well', list)
+  return await httpHelper.post(host + '/card/public/well', list)
 }
 
+
+
 const findAll = async ()=>{
-  let result = await httpHelper.get('http://146.222.43.190:8090/card/all')
+  let result = await httpHelper.get(host + '/card/all')
   return result.data
 }
 
+
+
 const createAction = async (action)=>{
-    return await httpHelper.post('http://146.222.43.190:8090/action/create', action)
+    return await httpHelper.post(host + '/action/create', action)
 }
 
+
+
 const loadActionContent = async (retroKey)=>{
-  let result = await httpHelper.get('http://146.222.43.190:8090/action/load', retroKey)
+  let result = await httpHelper.get(host + '/action/load', retroKey)
     return result.data
 }
 
