@@ -1,7 +1,6 @@
 import {Message} from 'element-ui';
 
 export default class WebsocketHandler {
-  socket = {}
 
   static initWebsocket(url, callback) {
     if (WebsocketHandler.isBrowserSupportWebsocket()) {

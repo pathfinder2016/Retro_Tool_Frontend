@@ -5,7 +5,7 @@
                 <el-form-item class="action-el">
                     <span slot="label" class="action-label">Action</span>
                 </el-form-item>
-                <el-input name="actionContent" id="action-textarea" class="action-textarea" placeholder="Pls input actions here..."
+                <el-input @input="saveAction" name="actionContent" id="action-textarea" class="action-textarea" placeholder="Pls input actions here..."
                           type="textarea" :rows="24"
                           v-model="form.actionContent"></el-input>
                 <el-form-item size="large">
@@ -69,7 +69,11 @@
             },
 
             onSubmit: function () {
-                console.log('submit!');
+                this.saveAction();
+                this.hamburgerCross();
+            },
+            saveAction: function(){
+                console.log('save action!');
                 let action = {
                     retroKey: 'I14',
                     actionContent: this.form.actionContent
