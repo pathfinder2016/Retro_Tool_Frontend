@@ -251,9 +251,6 @@
         this.reset()
         cards.forEach((card) => {
           if (card.type === Constant.CARD_TYPE.WELL) {
-            // let cardArray = this.public.wellCards.filter((item)=>{return item.id == card.id});
-            // if(cardArray.length != 0)
-            // if(this.public.we)
             this.add_public_well_card(card)
           } else if (card.type === Constant.CARD_TYPE.NOT_WELL) {
             this.add_public_not_well_card(card)
@@ -262,10 +259,28 @@
           }
         })
       },
+
+      notSupportRefresh(){
+        //禁止右键弹出菜单
+        window.oncontextmenu = function () {
+          return false;
+        }
+        window.onkeydown = function ()
+        {
+          if (event.keyCode == 116) {
+            WebsocketHandler.onclose();
+            alert('注意：页面支持F5 刷新，但是不支持直接点击浏览器上方按钮进行刷新');
+            event.keyCode = 0;
+            event.cancelBubble = true;
+            return false;
+          }
+        }
+      }
     },
 
     mounted() {
       WebsocketHandler.initWebsocket(this.websocketServerUrl, this.refresh)
+      this.notSupportRefresh()
     }
   }
 </script>
