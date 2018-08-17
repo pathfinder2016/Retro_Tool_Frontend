@@ -89,10 +89,14 @@
 </script>
 
 <style>
-
+    .el-textarea__inner{
+        color: #000;
+        background-color: #fff;
+    }
     .action-textarea {
-        font-size: 20px;
-        font-family: 'Microsoft YaHei'
+        /*font-size: 20px;*/
+        /*font-family: 'Microsoft YaHei'*/
+        font: bold 20px 'Microsoft YaHei','arial';
     }
 
     .action-el {
@@ -130,11 +134,11 @@
     }
 
     #wrapper.toggled {
-        padding-left: 420px
+        padding-left: 35%
     }
 
     #wrapper.toggled #sidebar-wrapper {
-        width: 34%
+        width: 35%
     }
 
     #wrapper.toggled #page-content-wrapper {
@@ -170,7 +174,7 @@
         border: 0;
         display: block;
         height: 32px;
-        margin-left: 12%;
+        /*margin-left: 12%;*/
         position: fixed;
         top: 20px;
         width: 32px;

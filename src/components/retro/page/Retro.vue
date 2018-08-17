@@ -117,7 +117,7 @@
         },
         cardNum: 0,
         socket: {},
-        websocketServerUrl: "ws://146.222.43.190:8090/websocket"
+        websocketServerUrl: "ws://146.222.81.139:8090/websocket"
       }
     },
 
@@ -265,15 +265,16 @@
         window.oncontextmenu = function () {
           return false;
         }
-        window.onkeydown = function ()
-        {
-          if (event.keyCode == 116) {
-            WebsocketHandler.onclose();
-            alert('注意：页面支持F5 刷新，但是不支持直接点击浏览器上方按钮进行刷新');
-            event.keyCode = 0;
-            event.cancelBubble = true;
-            return false;
-          }
+        window.onkeydown = function (e) {
+            var ev = window.event || e;
+            var code = ev.keyCode || ev.which;
+            if (code == 116) {
+              WebsocketHandler.onclose();
+              alert('注意：页面支持F5 刷新，但是不支持直接点击浏览器上方按钮进行刷新');
+              event.keyCode = 0;
+              event.cancelBubble = true;
+              return false;
+            }
         }
       }
     },
