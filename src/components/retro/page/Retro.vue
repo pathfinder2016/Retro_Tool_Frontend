@@ -399,7 +399,7 @@
   }
 
   .card-textarea:hover{
-  background-color: rgba(171, 255, 181, 0.95);
+  background-color: rgba(230, 255, 204, 0.95);
   }
 
   .private-board-column-content {
