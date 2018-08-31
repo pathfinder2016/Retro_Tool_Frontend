@@ -139,19 +139,63 @@
       },
 
       well_card_remove_handler(card) {
-
-        this.public.wellCards.splice(card, 1)
-        cardService.del(card, Constant.CARD_TYPE.WELL)
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.public.wellCards.splice(card, 1)
+          cardService.del(card, Constant.CARD_TYPE.WELL)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
 
       not_well_card_remove_handler(card) {
-        this.public.notWellCards.splice(card, 1)
-        cardService.del(card, Constant.CARD_TYPE.NOT_WELL)
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.public.notWellCards.splice(card, 1)
+          cardService.del(card, Constant.CARD_TYPE.NOT_WELL)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
 
       suggestion_card_remove_handler(card) {
-        this.public.suggestionCards.splice(card, 1)
-        cardService.del(card, Constant.CARD_TYPE.SUGGESTION)
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.public.suggestionCards.splice(card, 1)
+          cardService.del(card, Constant.CARD_TYPE.SUGGESTION)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
 
       well_card_full_screen_handler() {
@@ -341,12 +385,17 @@
 
   .card-textarea {
     width: 100%;
-    height: 100%;
+    height: 97%;
     border: 0;
     font-family: Aleo, sans-serif;
     background-color: rgba(255, 221, 178, 0.69);
     font-size: 18px;
     resize: none;
+  }
+
+  .operation-column-area {
+    background-color: rgba(255, 221, 178, 0.69);
+    cursor:default;
   }
 
   .card-textarea:hover{
@@ -364,10 +413,5 @@
     justify-content: center;
     align-items: flex-start;
     align-content: flex-start;
-  }
-
-  .operation-column-area {
-    background-color: rgba(255, 221, 178, 0.69);
-    cursor:default;
   }
 </style>
