@@ -11,7 +11,7 @@
         </div>
         <draggable class="public-board-column-content" :options="dropOptions" :list="public.wellCards"
                    @add="handle_move_to_public_well">
-          <div class="box-card" v-for="card in public.wellCards" :key="card.order">
+          <div class="box-card evenflow_scale" v-for="card in public.wellCards" :key="card.order">
             <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
             <i class="el-icon-delete operation-column-area" @click="well_card_remove_handler(card)"></i>
           </div>
@@ -20,7 +20,7 @@
           <el-button @click="add_private_well_card">+</el-button>
           <div class="board-column">
             <draggable class="private-board-column-content" :options="dropOptions" :list="private.wellCards">
-              <div class="box-card" v-for="card in private.wellCards" :key="card.order">
+              <div class="box-card evenflow_scale" v-for="card in private.wellCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
@@ -37,7 +37,7 @@
         </div>
         <draggable class="public-board-column-content" :options="dropOptions" :list="public.notWellCards"
                    @add="handle_move_to_public_not_well">
-          <div class="box-card" v-for="card in public.notWellCards" :key="card.order">
+          <div class="box-card evenflow_scale" v-for="card in public.notWellCards" :key="card.order">
             <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
             <i class="el-icon-delete operation-column-area" @click="not_well_card_remove_handler(card)"></i>
           </div>
@@ -46,7 +46,7 @@
           <el-button @click="add_private_not_well_card">+</el-button>
           <div class="board-column">
             <draggable class="private-board-column-content" :options="dropOptions" :list="private.notWellCards">
-              <div class="box-card" v-for="card in private.notWellCards" :key="card.order">
+              <div class="box-card evenflow_scale" v-for="card in private.notWellCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
@@ -63,7 +63,7 @@
         </div>
         <draggable class="public-board-column-content" :options="dropOptions" :list="public.suggestionCards"
                    @add="handle_move_to_public_suggestion">
-          <div class="box-card" v-for="card in public.suggestionCards" :key="card.order">
+          <div class="box-card evenflow_scale" v-for="card in public.suggestionCards" :key="card.order">
             <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
             <i class="el-icon-delete operation-column-area" @click="suggestion_card_remove_handler(card)"></i>
           </div>
@@ -72,7 +72,7 @@
           <el-button @click="add_private_suggestion_card">+</el-button>
           <div class="board-column">
             <draggable class="private-board-column-content" :options="dropOptions" :list="private.suggestionCards">
-              <div class="box-card" v-for="card in private.suggestionCards" :key="card.order">
+              <div class="box-card evenflow_scale" v-for="card in private.suggestionCards" :key="card.order">
                 <textarea v-model="card.content" class="card-textarea" :rows="3"></textarea>
               </div>
             </draggable>
@@ -89,6 +89,7 @@
   import draggable from 'vuedraggable'
   import Action from '../component/Action'
   import WebsocketHandler from '../service/WebsocketHandler'
+  import '../../../common/css/evenFlow.css';
 
   export default {
     components: {
@@ -117,7 +118,7 @@
         },
         cardNum: 0,
         socket: {},
-        websocketServerUrl: "ws://146.222.81.139:8090/websocket"
+        websocketServerUrl: "ws://146.222.43.190:8090/websocket"
       }
     },
 
@@ -138,6 +139,7 @@
       },
 
       well_card_remove_handler(card) {
+
         this.public.wellCards.splice(card, 1)
         cardService.del(card, Constant.CARD_TYPE.WELL)
       },
@@ -270,7 +272,7 @@
             var code = ev.keyCode || ev.which;
             if (code == 116) {
               WebsocketHandler.onclose();
-              alert('注意：页面支持F5 刷新，但是不支持直接点击浏览器上方按钮进行刷新');
+              // alert('注意：页面支持F5 刷新，但是不支持直接点击浏览器上方按钮进行刷新');
               event.keyCode = 0;
               event.cancelBubble = true;
               return false;
@@ -328,12 +330,13 @@
   }
 
   .box-card {
-    margin: 1px;
-    padding: 5px 5px 5px 5px;
-    width: 290px;
+    margin: 8px;
+    padding: 5px 5px 0px 0px;
+    width: 280px;
     height: 130px;
-    background-color: rgba(255, 221, 178, 0.69);
+    background-color: rgba(255, 255, 255, 0.69);
     display: inline-flex;
+    cursor:move;
   }
 
   .card-textarea {
@@ -343,6 +346,11 @@
     font-family: Aleo, sans-serif;
     background-color: rgba(255, 221, 178, 0.69);
     font-size: 18px;
+    resize: none;
+  }
+
+  .card-textarea:hover{
+  background-color: rgba(171, 255, 181, 0.95);
   }
 
   .private-board-column-content {
@@ -360,5 +368,6 @@
 
   .operation-column-area {
     background-color: rgba(255, 221, 178, 0.69);
+    cursor:default;
   }
 </style>
